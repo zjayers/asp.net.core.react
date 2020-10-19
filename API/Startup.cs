@@ -2,6 +2,10 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using AutoMapper;
+using Core;
+using Core.Activities;
+using MediatR;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -32,6 +36,12 @@ namespace API
             {
                 opt.UseSqlite(Configuration.GetConnectionString("DefaultConnection"));
             });
+
+            // Add MediatR
+            services.AddMediatR(typeof(InitCore).Assembly);
+
+            // Add AutoMapper
+            services.AddAutoMapper(typeof(InitCore).Assembly);
 
             services.AddCors(o =>
             {
