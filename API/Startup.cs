@@ -33,6 +33,12 @@ namespace API
                 opt.UseSqlite(Configuration.GetConnectionString("DefaultConnection"));
             });
 
+            services.AddCors(o =>
+            {
+                o.AddPolicy("CorsPolicy",
+                    policy => { policy.AllowAnyHeader().AllowAnyMethod().WithOrigins("http://localhost:3000"); });
+            });
+
             // Add API Controllers
             services.AddControllers();
         }
@@ -49,14 +55,11 @@ namespace API
 
             // Middleware: Allow ASP.NET to route to the API controllers
             app.UseRouting();
-
+            app.UseCors("CorsPolicy");
             app.UseAuthorization();
 
             // Middleware: Map controller endpoints into the API
-            app.UseEndpoints(endpoints =>
-            {
-                endpoints.MapControllers();
-            });
+            app.UseEndpoints(endpoints => { endpoints.MapControllers(); });
         }
     }
 }
