@@ -1,24 +1,21 @@
 // * Imports
-import React, { FormEvent, useState } from "react";
+import { observer } from "mobx-react";
+import React, { FormEvent, useContext, useState } from "react";
 import { Button, Form, Segment } from "semantic-ui-react";
 import { v4 as uuid } from "uuid";
 import { IActivity } from "../../../../models";
-
-// * Interfaces
-interface IProps {
-  selectedActivity: IActivity | null;
-  setEditMode: (editMode: boolean) => void;
-  handleCreateActivity: (activity: IActivity) => void;
-  handleEditActivity: (activity: IActivity) => void;
-}
+import ActivityContext from "../../../store/Activities/activityStore";
 
 // * Component
-const ActivityForm: React.FC<IProps> = ({
-  selectedActivity,
-  setEditMode,
-  handleCreateActivity,
-  handleEditActivity,
-}) => {
+const ActivityForm = () => {
+  const {
+    selectedActivity,
+    createOneActivity,
+    editOneActivity,
+    setEditMode,
+    submitting,
+  } = useContext(ActivityContext);
+
   // * Initial Form Values
   const initForm = () => {
     if (selectedActivity) {
@@ -59,10 +56,10 @@ const ActivityForm: React.FC<IProps> = ({
         ...activity,
         id: uuid(),
       };
-      return handleCreateActivity(newActivity);
+      return createOneActivity(newActivity);
     }
 
-    handleEditActivity(activity);
+    editOneActivity(activity);
   };
 
   return (
@@ -108,6 +105,7 @@ const ActivityForm: React.FC<IProps> = ({
         />
         <Button.Group widths={2}>
           <Button
+            loading={submitting}
             floated={"right"}
             positive
             type={"submit"}
@@ -126,4 +124,4 @@ const ActivityForm: React.FC<IProps> = ({
 };
 
 // * Exports
-export default ActivityForm;
+export default observer(ActivityForm);

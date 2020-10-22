@@ -1,21 +1,26 @@
 // * Imports
-import React from "react";
+import { observer } from "mobx-react";
+import React, { SyntheticEvent, useContext } from "react";
 import { Button, Item, Label } from "semantic-ui-react";
 import { IActivity } from "../../../../models";
+import ActivityContext from "../../../store/Activities/activityStore";
 
 // * Interfaces
 interface IProps {
   activity: IActivity;
-  selectActivity: (id: string | null) => void;
-  handleDeleteActivity: (id: string) => void;
 }
 
 // * Component
 const ActivityItem: React.FC<IProps> = ({
-  activity: { id, title, date, description, city, venue, category },
-  selectActivity,
-  handleDeleteActivity,
+  activity: { title, date, description, category, city, venue, id },
 }) => {
+  const {
+    setSelectedActivity,
+    target,
+    submitting,
+    deleteOneActivity,
+  } = useContext(ActivityContext);
+
   return (
     <Item>
       <Item.Content>
@@ -32,13 +37,15 @@ const ActivityItem: React.FC<IProps> = ({
             floated={"right"}
             content={"View"}
             color={"blue"}
-            onClick={() => selectActivity(id)}
+            onClick={() => setSelectedActivity(id)}
           />
           <Button
+            name={id}
+            loading={target === id && submitting}
             floated={"right"}
             content={"Delete"}
             color={"red"}
-            onClick={() => handleDeleteActivity(id)}
+            onClick={(e) => deleteOneActivity(e, id)}
           />
           <Label basic content={category} />
         </Item.Extra>
@@ -48,4 +55,4 @@ const ActivityItem: React.FC<IProps> = ({
 };
 
 // * Exports
-export default ActivityItem;
+export default observer(ActivityItem);

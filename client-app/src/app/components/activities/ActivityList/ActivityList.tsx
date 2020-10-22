@@ -1,32 +1,19 @@
 // * Imports
-import React from "react";
+import { observer } from "mobx-react";
+import React, { useContext } from "react";
 import { Item, Segment } from "semantic-ui-react";
-import { IActivity } from "../../../../models";
+import ActivityContext from "../../../store/Activities/activityStore";
 import ActivityItem from "../ActivityItem/ActivityItem";
 
-// * Interfaces
-interface IProps {
-  activities: IActivity[];
-  selectActivity: (id: string | null) => void;
-  handleDeleteActivity: (id: string) => void;
-}
-
 // * Component
-const MyComponent: React.FC<IProps> = ({
-  activities,
-  selectActivity,
-  handleDeleteActivity,
-}) => {
+const ActivityList = () => {
+  const { activitiesByDate } = useContext(ActivityContext);
+
   return (
     <Segment clearing>
       <Item.Group divided>
-        {activities.map((activity) => (
-          <ActivityItem
-            activity={activity}
-            key={activity.id}
-            selectActivity={selectActivity}
-            handleDeleteActivity={handleDeleteActivity}
-          />
+        {activitiesByDate.map((activity) => (
+          <ActivityItem activity={activity} key={activity.id} />
         ))}
       </Item.Group>
     </Segment>
@@ -34,4 +21,4 @@ const MyComponent: React.FC<IProps> = ({
 };
 
 // * Exports
-export default MyComponent;
+export default observer(ActivityList);
