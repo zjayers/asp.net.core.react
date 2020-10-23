@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using Core.Activities;
+using Core.DTO;
 using Domain;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
@@ -10,7 +11,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace API.Controllers
 {
     [Route("api/[controller]")]
-    [ApiController]
+    [ApiController] //Allows not having to add [FromBody] annotation in controllers
     public class ActivitiesController : Controller
     {
         private readonly IMediator _mediator;
@@ -22,13 +23,13 @@ namespace API.Controllers
 
         // GET
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Activity>>> GetAllActivities(CancellationToken ct)
+        public async Task<ActionResult<IEnumerable<ActivityDto>>> GetAllActivities(CancellationToken ct)
         {
             return await _mediator.Send(new GetAll.Query(), ct);
         }
 
         [HttpGet("{id}")]
-        public async Task<ActionResult<Activity>> GetOneActivity(Guid id)
+        public async Task<ActionResult<ActivityDto>> GetOneActivity(Guid id)
         {
             return await _mediator.Send(new GetOne.Query() {Id = id});
         }

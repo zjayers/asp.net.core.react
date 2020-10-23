@@ -1,4 +1,5 @@
 using System;
+using FluentValidation;
 
 namespace Core.DTO
 {
@@ -11,5 +12,6 @@ namespace Core.DTO
         public DateTime Date { get; set; }
         public string City { get; set; }
         public string Venue { get; set; }
+
     }
 }

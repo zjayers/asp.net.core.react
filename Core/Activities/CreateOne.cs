@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using AutoMapper;
 using Core.DTO;
 using Domain;
+using FluentValidation;
 using MediatR;
 using Persistence;
 
@@ -12,6 +13,19 @@ namespace Core.Activities
     public class CreateOne
     {
         public class Command : ActivityDto, IRequest { }
+
+        public class CommandValidator : AbstractValidator<Command>
+        {
+            public CommandValidator()
+            {
+                RuleFor(x => x.Title).NotEmpty();
+                RuleFor(x => x.Description).NotEmpty();
+                RuleFor(x => x.Category).NotEmpty();
+                RuleFor(x => x.Date).NotEmpty();
+                RuleFor(x => x.City).NotEmpty();
+                RuleFor(x => x.Venue).NotEmpty();
+            }
+        }
 
         public class Handler : IRequestHandler<Command>
         {
@@ -29,8 +43,8 @@ namespace Core.Activities
                 var activity = _mapper.Map<Command, Activity>(request);
 
                 _context.Activities.Add(activity);
-                var numberOfSuccessfulySaves = await _context.SaveChangesAsync();
-                var successful = numberOfSuccessfulySaves > 0;
+                var numberOfSuccessfulSaves = await _context.SaveChangesAsync();
+                var successful = numberOfSuccessfulSaves > 0;
 
                 if (successful) return Unit.Value;
 

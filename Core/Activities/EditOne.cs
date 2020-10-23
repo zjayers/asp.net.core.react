@@ -1,9 +1,12 @@
 using System;
+using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
 using AutoMapper;
 using Core.DTO;
+using Core.Errors;
 using Domain;
+using FluentValidation;
 using MediatR;
 using Persistence;
 
@@ -12,6 +15,19 @@ namespace Core.Activities
     public class EditOne
     {
         public class Command : ActivityDto, IRequest { }
+
+        public class CommandValidator : AbstractValidator<Command>
+        {
+            public CommandValidator()
+            {
+                RuleFor(x => x.Title).NotEmpty();
+                RuleFor(x => x.Description).NotEmpty();
+                RuleFor(x => x.Category).NotEmpty();
+                RuleFor(x => x.Date).NotEmpty();
+                RuleFor(x => x.City).NotEmpty();
+                RuleFor(x => x.Venue).NotEmpty();
+            }
+        }
 
         public class Handler : IRequestHandler<Command>
         {
@@ -31,7 +47,9 @@ namespace Core.Activities
                 // Command logic goes here
                 var activityInDb = await _context.Activities.FindAsync(activity.Id);
 
-                if (activityInDb == null) throw new Exception("Could not find activity in database!");
+                if (activity == null)
+                    throw new RestException(HttpStatusCode.NotFound,
+                        new {activity = "Could not find activity in database!"});
 
                 _mapper.Map(activity, activityInDb);
 

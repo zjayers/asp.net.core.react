@@ -1,48 +1,42 @@
 // * Imports
 import { observer } from "mobx-react";
-import React, { useContext } from "react";
-import { Button, Card, Image } from "semantic-ui-react";
-import { IActivity } from "../../../../models";
+import React, { useContext, useEffect } from "react";
+import { useParams } from "react-router-dom";
+import { Grid } from "semantic-ui-react";
 import ActivityContext from "../../../store/Activities/activityStore";
+import { LoadingSpinner } from "../../shared";
+import ActivityDetailsChat from "./ActivityDetailsChat";
+import ActivityDetailsHeader from "./ActivityDetailsHeader";
+import ActivityDetailsInfo from "./ActivityDetailsInfo";
+import ActivityDetailsSideBar from "./ActivityDetailsSideBar";
 
 // * Component
 const ActivityDetails = () => {
-  const { selectedActivity, setSelectedActivity, setEditMode } = useContext(
+  const { getOneActivity, loadingInitial, selectedActivity } = useContext(
     ActivityContext
   );
-  const { title, category, date, description } = selectedActivity as IActivity;
 
-  return (
-    <Card fluid>
-      <Image
-        src={`/assets/categoryImages/${category}.jpg`}
-        wrapped
-        ui={false}
-      />
-      <Card.Content>
-        <Card.Header>{title}</Card.Header>
-        <Card.Meta>
-          <span>{date}</span>
-        </Card.Meta>
-        <Card.Description>{description}</Card.Description>
-      </Card.Content>
-      <Card.Content extra>
-        <Button.Group widths={2}>
-          <Button
-            basic
-            color={"blue"}
-            content={"Edit"}
-            onClick={() => setEditMode(true)}
-          />
-          <Button
-            basic
-            color={"grey"}
-            content={"Cancel"}
-            onClick={() => setSelectedActivity(null)}
-          />
-        </Button.Group>
-      </Card.Content>
-    </Card>
+  const { id } = useParams();
+
+  useEffect(() => {
+    getOneActivity(id);
+  }, [getOneActivity, id]);
+
+  if (!selectedActivity.id) return <h1>Activity Not Found</h1>;
+
+  return loadingInitial ? (
+    <LoadingSpinner content={"Loading activity..."} />
+  ) : (
+    <Grid>
+      <Grid.Column width={10}>
+        <ActivityDetailsHeader activity={selectedActivity} />
+        <ActivityDetailsInfo activity={selectedActivity} />
+        <ActivityDetailsChat activity={selectedActivity} />
+      </Grid.Column>
+      <Grid.Column width={6}>
+        <ActivityDetailsSideBar activity={selectedActivity} />
+      </Grid.Column>
+    </Grid>
   );
 };
 

@@ -1,8 +1,10 @@
 using System;
+using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
 using AutoMapper;
 using Core.DTO;
+using Core.Errors;
 using Domain;
 using MediatR;
 using Persistence;
@@ -30,7 +32,9 @@ namespace Core.Activities
 
                 var activityInDb = await _context.Activities.FindAsync(activity.Id);
 
-                if (activityInDb == null) throw new Exception("Could not find activity in database!");
+                if (activityInDb == null)
+                    throw new RestException(HttpStatusCode.NotFound,
+                        new {activity = "Could not find activity in database!"});
 
                 _context.Remove(activityInDb);
 
