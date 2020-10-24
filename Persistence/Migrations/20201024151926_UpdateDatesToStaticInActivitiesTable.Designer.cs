@@ -2,15 +2,17 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Persistence;
 
 namespace Persistence.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20201024151926_UpdateDatesToStaticInActivitiesTable")]
+    partial class UpdateDatesToStaticInActivitiesTable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -212,59 +214,6 @@ namespace Persistence.Migrations
                         .HasName("UserNameIndex");
 
                     b.ToTable("AspNetUsers");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = "233683EE-CD2D-4B0D-97CD-34715E6D5BDF",
-                            AccessFailedCount = 0,
-                            ConcurrencyStamp = "5c1cbe50-290a-464b-b32d-60981bea1877",
-                            DisplayName = "Bob",
-                            Email = "bob@test.com",
-                            EmailConfirmed = false,
-                            LockoutEnabled = false,
-                            NormalizedEmail = "BOB@TEST.COM",
-                            NormalizedUserName = "BOB",
-                            PasswordHash = "AQAAAAEAACcQAAAAEAy90BXaaDIxJm+9G2FiuKBNmjnGr4/syBRu/GTPuAZ2DbIAWNb1kl2VzC4PfBDJkA==",
-                            PhoneNumberConfirmed = false,
-                            SecurityStamp = "92657c22-f297-41da-984a-8deb392f5540",
-                            TwoFactorEnabled = false,
-                            UserName = "bob"
-                        },
-                        new
-                        {
-                            Id = "EC50E466-AE94-4D0A-BAAD-831A41191223",
-                            AccessFailedCount = 0,
-                            ConcurrencyStamp = "c01f9e4a-5935-43aa-a137-1cf23c8c499e",
-                            DisplayName = "Tom",
-                            Email = "tom@test.com",
-                            EmailConfirmed = false,
-                            LockoutEnabled = false,
-                            NormalizedEmail = "TOM@TEST.COM",
-                            NormalizedUserName = "TOM",
-                            PasswordHash = "AQAAAAEAACcQAAAAEAy90BXaaDIxJm+9G2FiuKBNmjnGr4/syBRu/GTPuAZ2DbIAWNb1kl2VzC4PfBDJkA==",
-                            PhoneNumberConfirmed = false,
-                            SecurityStamp = "b88d0d77-d0c7-41b1-adf0-fa43d13028db",
-                            TwoFactorEnabled = false,
-                            UserName = "tom"
-                        },
-                        new
-                        {
-                            Id = "DEB85499-584C-49C1-8DC4-765838874650",
-                            AccessFailedCount = 0,
-                            ConcurrencyStamp = "1abc3ae0-c563-4af0-aaee-bb7d6c1a0258",
-                            DisplayName = "Jane",
-                            Email = "jane@test.com",
-                            EmailConfirmed = false,
-                            LockoutEnabled = false,
-                            NormalizedEmail = "JANE@TEST.COM",
-                            NormalizedUserName = "JANE",
-                            PasswordHash = "AQAAAAEAACcQAAAAEAy90BXaaDIxJm+9G2FiuKBNmjnGr4/syBRu/GTPuAZ2DbIAWNb1kl2VzC4PfBDJkA==",
-                            PhoneNumberConfirmed = false,
-                            SecurityStamp = "87f7b445-3fa1-497f-924c-39b0f2370947",
-                            TwoFactorEnabled = false,
-                            UserName = "jane"
-                        });
                 });
 
             modelBuilder.Entity("Domain.Value", b =>

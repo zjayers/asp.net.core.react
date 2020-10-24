@@ -1,22 +1,31 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
 using API.Middleware;
 using AutoMapper;
 using Core;
 using Core.Activities;
+using Core.Interfaces;
+using Domain;
 using FluentValidation.AspNetCore;
+using Infrastructure.Security;
 using MediatR;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Authorization;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using Microsoft.IdentityModel.Tokens;
 using Persistence;
 
 namespace API
@@ -45,6 +54,7 @@ namespace API
             // Add AutoMapper
             services.AddAutoMapper(typeof(InitCore).Assembly);
 
+            // Add Cors to the API
             services.AddCors(o =>
             {
                 o.AddPolicy("CorsPolicy",
@@ -52,16 +62,44 @@ namespace API
             });
 
             // Add API Controllers
-            services.AddControllers().AddFluentValidation(cfg =>
+            services.AddControllers(opt =>
+                {
+                    // This causes all endpoints to require authorization
+                    var policy = new AuthorizationPolicyBuilder().RequireAuthenticatedUser().Build();
+                    opt.Filters.Add(new AuthorizeFilter(policy));
+                }
+            ).AddFluentValidation(cfg => { cfg.RegisterValidatorsFromAssemblyContaining<InitCore>(); });
+
+            // Add ASP.NET Identity
+            var builder = services.AddIdentityCore<AppUser>();
+            var identityBuilder = new IdentityBuilder(builder.UserType, builder.Services);
+            identityBuilder.AddEntityFrameworkStores<DataContext>();
+            identityBuilder.AddSignInManager<SignInManager<AppUser>>();
+
+            // TODO: REMOVE JWT SECRET KEY
+            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["TokenKey"]));
+
+            services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(opt =>
             {
-                cfg.RegisterValidatorsFromAssemblyContaining<InitCore>();
+                opt.TokenValidationParameters = new TokenValidationParameters()
+                {
+                    ValidateIssuerSigningKey = true,
+                    IssuerSigningKey = key,
+                    ValidateAudience = false,
+                    ValidateIssuer = false
+                };
             });
+
+            // Setup JWT Generator
+            services.AddScoped<IJwtGenerator, JwtGenerator>();
+
+            // Setup HTTP Context username extractor
+            services.AddScoped<IUserAccessor, UserAccessor>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
-
             app.UseMiddleware<ErrorHandlingMiddleware>();
 
             // if (env.IsDevelopment())
@@ -74,6 +112,8 @@ namespace API
             // Middleware: Allow ASP.NET to route to the API controllers
             app.UseRouting();
             app.UseCors("CorsPolicy");
+
+            app.UseAuthentication();
             app.UseAuthorization();
 
             // Middleware: Map controller endpoints into the API

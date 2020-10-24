@@ -15,9 +15,9 @@ const HomePage = () => {
             alt="logo"
             style={{ marginBottom: 12 }}
           />
-          Reactivities
+          Lively
         </Header>
-        <Header as="h2" inverted content="Welcome to Reactivities" />
+        <Header as="h2" inverted content="Welcome to Lively" />
         <Button as={Link} to="/activities" size="huge" inverted>
           Take me to the activities!
         </Button>
