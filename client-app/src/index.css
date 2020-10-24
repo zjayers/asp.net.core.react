@@ -61,4 +61,16 @@ code {
     font-weight: normal;
 }
 
+.home-page-container {
+    display: flex !important;
+    flex-direction: column !important;
+    flex: 1;
+    align-items: center;
+    margin: auto !important;
+}
+
+.ui.red.basic.label {
+    border: none !important;
+}
+
 /*end home page styles*/

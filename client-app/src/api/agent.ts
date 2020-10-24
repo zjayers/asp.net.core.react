@@ -6,6 +6,16 @@ import { IActivity, IUser, IUserFormValues } from "../models";
 /* Defaults */
 axios.defaults.baseURL = "http://localhost:5000/api";
 
+/* Intercept request and send jwts with requests */
+axios.interceptors.request.use(
+  (config) => {
+    const token = window.localStorage.getItem("jwt");
+    if (token) config.headers.Authorization = `Bearer ${token}`;
+    return config;
+  },
+  (e) => Promise.reject(e)
+);
+
 /* Errors */
 axios.interceptors.response.use(undefined, (error) => {
   if (error.message === "Network Error" || !error.response) {
@@ -35,7 +45,7 @@ axios.interceptors.response.use(undefined, (error) => {
       break;
   }
 
-  throw error;
+  throw error.response;
 });
 
 const navigateToNotFoundPage = () => {

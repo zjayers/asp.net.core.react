@@ -5,6 +5,7 @@ export default class GuiStore {
   rootStore: RootStore;
 
   // * Observables
+  appLoaded = false;
   loadingInitial = false;
   editMode = false;
   submitting = false;
@@ -15,13 +16,12 @@ export default class GuiStore {
     makeAutoObservable(this);
   }
 
-  // * Actions
-
   /**
    * Set form edit mode
    */
   setEditMode = (mode: boolean) => (this.rootStore.guiStore.editMode = mode);
 
+  // * Actions
   /**
    * Set button submission flag
    */
@@ -33,4 +33,6 @@ export default class GuiStore {
    */
   setTarget = (targetName: string) =>
     (this.rootStore.guiStore.target = targetName);
+
+  setAppAsLoaded = () => (this.appLoaded = true);
 }

@@ -45,7 +45,7 @@ const ActivityDetailsHeader: React.FC<IProps> = ({
                   content={title}
                   style={{ color: "white" }}
                 />
-                <p>{format(date!, "eeee do MMMM")}</p>
+                <p>{format(date, "eeee, MMMM do")}</p>
                 <p>
                   Hosted by <strong>Bob</strong>
                 </p>

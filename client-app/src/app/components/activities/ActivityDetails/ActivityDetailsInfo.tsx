@@ -31,7 +31,7 @@ const ActivityDetailsInfo: React.FC<IProps> = ({
           </Grid.Column>
           <Grid.Column width={15}>
             <span>
-              {format(date!, "eeee do MMMM")} at {format(date!, "h:mm a")}
+              {format(date!, "eeee, MMMM do")} at {format(date!, "h:mm a")}
             </span>
           </Grid.Column>
         </Grid>

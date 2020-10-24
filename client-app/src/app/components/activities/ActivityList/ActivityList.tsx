@@ -4,6 +4,7 @@ import React, { Fragment } from "react";
 import { Item, Label } from "semantic-ui-react";
 import { useActivityStore } from "../../../hooks/useActivityStore";
 import ActivityItem from "../ActivityItem/ActivityItem";
+import { format } from "date-fns";
 
 // * Component
 const ActivityList = () => {
@@ -14,7 +15,7 @@ const ActivityList = () => {
       {activitiesByDate.map(([group, activities]) => (
         <Fragment key={group}>
           <Label size={"large"} color={"blue"}>
-            {group}
+            {format(group, "eeee, MMMM do")}
           </Label>
           <Item.Group divided>
             {activities.map((activity) => (

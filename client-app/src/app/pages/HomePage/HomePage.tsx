@@ -1,13 +1,20 @@
 // * Imports
+import { observer } from "mobx-react";
 import React from "react";
-import { Link } from "react-router-dom";
 import { Button, Container, Header, Image, Segment } from "semantic-ui-react";
+import LoginForm from "../../components/user/LoginForm/LoginForm";
+import RegisterForm from "../../components/user/RegisterForm/RegisterForm";
+
+import { useAuthRedirect } from "../../hooks/useAuthRedirect";
+import { useModalStore } from "../../hooks/useModalStore";
 
 // * Component
 const HomePage = () => {
-  return (
+  const { openModal } = useModalStore();
+
+  return useAuthRedirect(
     <Segment inverted textAlign="center" vertical className="masthead">
-      <Container text>
+      <Container className={"home-page-container"} text textAlign={"center"}>
         <Header as="h1" inverted>
           <Image
             size="massive"
@@ -18,13 +25,22 @@ const HomePage = () => {
           Lively
         </Header>
         <Header as="h2" inverted content="Welcome to Lively" />
-        <Button as={Link} to="/activities" size="huge" inverted>
-          Take me to the activities!
-        </Button>
+        <Button.Group widths={2} size={"big"}>
+          <Button onClick={() => openModal(<LoginForm />)} size="huge" inverted>
+            Login
+          </Button>
+          <Button
+            onClick={() => openModal(<RegisterForm />)}
+            size="huge"
+            inverted
+          >
+            Register
+          </Button>
+        </Button.Group>
       </Container>
     </Segment>
   );
 };
 
 // * Exports
-export default HomePage;
+export default observer(HomePage);
