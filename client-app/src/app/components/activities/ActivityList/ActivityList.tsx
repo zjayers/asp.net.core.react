@@ -1,13 +1,13 @@
 // * Imports
 import { observer } from "mobx-react";
-import React, { Fragment, useContext } from "react";
+import React, { Fragment } from "react";
 import { Item, Label } from "semantic-ui-react";
-import ActivityContext from "../../../store/Activities/activityStore";
+import { useActivityStore } from "../../../hooks/useActivityStore";
 import ActivityItem from "../ActivityItem/ActivityItem";
 
 // * Component
 const ActivityList = () => {
-  const { activitiesByDate } = useContext(ActivityContext);
+  const { activitiesByDate } = useActivityStore();
 
   return (
     <Fragment>

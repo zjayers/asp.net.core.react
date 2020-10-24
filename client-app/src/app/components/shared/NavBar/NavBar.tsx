@@ -1,10 +1,10 @@
-import React, { useContext } from "react";
+import React from "react";
 import { NavLink } from "react-router-dom";
 import { Button, Container, Menu } from "semantic-ui-react";
-import ActivityContext from "../../../store/Activities/activityStore";
+import { useActivityStore } from "../../../hooks/useActivityStore";
 
 const NavBar = () => {
-  const { clearSelectedActivity } = useContext(ActivityContext);
+  const { clearSelectedActivity } = useActivityStore();
 
   return (
     <Menu fixed={"top"} inverted>

@@ -1,20 +1,21 @@
 // * Imports
 import { observer } from "mobx-react";
-import React, { useContext, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Field, Form as FinalForm } from "react-final-form";
 import { useHistory, useParams } from "react-router-dom";
-import { Button, Form, Grid, Segment } from "semantic-ui-react";
-import { v4 as uuid } from "uuid";
-import { IActivity } from "../../../../models";
-import { combinedDateAndTime } from "../../../../util/combine-date-and-time";
-import { categoryOptions } from "../../../data/category-options";
-import ActivityContext from "../../../store/Activities/activityStore";
 import {
   combineValidators,
   composeValidators,
   hasLengthGreaterThan,
   isRequired,
 } from "revalidate";
+import { Button, Form, Grid, Segment } from "semantic-ui-react";
+import { v4 as uuid } from "uuid";
+import { IActivity } from "../../../../models";
+import { combinedDateAndTime } from "../../../../util/combine-date-and-time";
+import { categoryOptions } from "../../../data/category-options";
+import { useActivityStore } from "../../../hooks/useActivityStore";
+import { useGuiStore } from "../../../hooks/useGuiStore";
 
 import {
   DateInput,
@@ -43,9 +44,10 @@ const ActivityForm = () => {
     createOneActivity,
     editOneActivity,
     getOneActivity,
-    submitting,
     clearSelectedActivity,
-  } = useContext(ActivityContext);
+  } = useActivityStore();
+
+  const { submitting } = useGuiStore();
 
   const history = useHistory();
   const { id } = useParams();

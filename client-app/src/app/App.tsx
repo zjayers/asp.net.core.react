@@ -9,6 +9,7 @@ import {
   ActivityForm,
 } from "./components/activities";
 import { NavBar } from "./components/shared";
+import LoginForm from "./components/user/LoginForm/loginForm";
 import HomePage from "./pages/HomePage/HomePage";
 import NotFound from "./pages/NotFound/NotFound";
 
@@ -38,6 +39,7 @@ const App = () => {
                   path={["/createActivity", "/manage/:id"]}
                   component={ActivityForm}
                 />
+                <Route path={"/login"} component={LoginForm} />
                 <Route component={NotFound} />
               </Switch>
             </Container>

@@ -1,9 +1,10 @@
 // * Imports
 import { observer } from "mobx-react";
-import React, { useContext, useEffect } from "react";
+import React, { useEffect } from "react";
 import { useParams } from "react-router-dom";
 import { Grid } from "semantic-ui-react";
-import ActivityContext from "../../../store/Activities/activityStore";
+import { useActivityStore } from "../../../hooks/useActivityStore";
+import { useGuiStore } from "../../../hooks/useGuiStore";
 import { LoadingSpinner } from "../../shared";
 import ActivityDetailsChat from "./ActivityDetailsChat";
 import ActivityDetailsHeader from "./ActivityDetailsHeader";
@@ -12,9 +13,8 @@ import ActivityDetailsSideBar from "./ActivityDetailsSideBar";
 
 // * Component
 const ActivityDetails = () => {
-  const { getOneActivity, loadingInitial, selectedActivity } = useContext(
-    ActivityContext
-  );
+  const { getOneActivity, selectedActivity } = useActivityStore();
+  const { loadingInitial } = useGuiStore();
 
   const { id } = useParams();
 

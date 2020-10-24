@@ -1,11 +1,11 @@
 // * Imports
 import { format } from "date-fns";
 import { observer } from "mobx-react";
-import React, { useContext } from "react";
+import React from "react";
 import { Link } from "react-router-dom";
 import { Button, Icon, Item, Segment } from "semantic-ui-react";
 import { IActivity } from "../../../../models";
-import ActivityContext from "../../../store/Activities/activityStore";
+import { useActivityStore } from "../../../hooks/useActivityStore";
 
 // * Interfaces
 interface IProps {
@@ -16,7 +16,7 @@ interface IProps {
 const ActivityItem: React.FC<IProps> = ({
   activity: { title, date, description, category, city, venue, id },
 }) => {
-  const { setSelectedActivity } = useContext(ActivityContext);
+  const { setSelectedActivity } = useActivityStore();
 
   return (
     <Segment.Group>

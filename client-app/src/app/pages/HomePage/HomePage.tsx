@@ -1,7 +1,7 @@
 // * Imports
 import React from "react";
 import { Link } from "react-router-dom";
-import { Button, Container, Header, Segment, Image } from "semantic-ui-react";
+import { Button, Container, Header, Image, Segment } from "semantic-ui-react";
 
 // * Component
 const HomePage = () => {

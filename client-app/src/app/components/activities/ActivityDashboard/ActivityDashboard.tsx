@@ -1,13 +1,15 @@
 import { observer } from "mobx-react";
-import React, { useContext, useEffect } from "react";
+import React, { useEffect } from "react";
 import { Grid } from "semantic-ui-react";
-import ActivityContext from "../../../store/Activities/activityStore";
+import { useActivityStore } from "../../../hooks/useActivityStore";
+import { useGuiStore } from "../../../hooks/useGuiStore";
 import { LoadingSpinner } from "../../shared";
 import ActivityList from "../ActivityList/ActivityList";
 
 // * Component
 const ActivityDashboard = () => {
-  const { loadingInitial, getAllActivities } = useContext(ActivityContext);
+  const { getAllActivities } = useActivityStore();
+  const { loadingInitial } = useGuiStore();
 
   // * Lifecycle
   useEffect(() => {

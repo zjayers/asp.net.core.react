@@ -1,9 +1,11 @@
 import { makeAutoObservable, runInAction } from "mobx";
-import { createContext, SyntheticEvent } from "react";
-import { toast } from "react-toastify";
+import { SyntheticEvent } from "react";
 import agent from "../../../api/agent";
 import { IActivity } from "../../../models";
+import { catchAsync } from "../../../util/catch-async";
+import { groupActivitiesByDate } from "../../../util/group-activities-by-date";
 import { history } from "../../features/browser-history";
+import { RootStore } from "../index";
 
 const DEFAULT_ACTIVITY = {
   id: "",
@@ -16,93 +18,19 @@ const DEFAULT_ACTIVITY = {
   venue: "",
 };
 
-class ActivityStore {
+export default class ActivityStore {
+  rootStore: RootStore;
+
   // * Observables
   activityRegistry = new Map();
   selectedActivity: IActivity = DEFAULT_ACTIVITY;
-  loadingInitial = false;
-  editMode = false;
-  submitting = false;
-  target = "";
-
-  constructor() {
-    makeAutoObservable(this);
-  }
-
-  // * Computed
-  get activitiesByDate() {
-    const activityArr = Array.from(this.activityRegistry.values());
-    return ActivityStore.groupActivitiesByDate(activityArr);
-  }
-
-  /**
-   * Utility method to sort and group activities by date
-   */
-  private static groupActivitiesByDate(activities: IActivity[]) {
-    const sortedActivities = activities.sort(
-      (a, b) => a.date.getTime() - b.date.getTime()
-    );
-
-    return Object.entries(
-      sortedActivities.reduce((activities, activity) => {
-        const date = activity.date.toISOString().split("T")[0];
-        activities[date] = activities[date]
-          ? [...activities[date], activity]
-          : [activity];
-        return activities;
-      }, {} as { [key: string]: IActivity[] })
-    );
-  }
-
-  setEditMode = (mode: boolean) => (this.editMode = mode);
 
   // * Actions
-
-  /**
-   * Set button submission flag
-   */
-  setSubmitting = (mode: boolean) => (this.submitting = mode);
-
-  /**
-   * Set target button when submitting
-   */
-  setTarget = (targetName: string) => (this.target = targetName);
-
-  /**
-   * Set the selected activity observable to null
-   */
-  clearSelectedActivity = () => {
-    this.selectedActivity = DEFAULT_ACTIVITY;
-  };
-
-  /**
-   * Set the selected activity observable to an activity from the registry
-   */
-  setSelectedActivity = (id: string | null) => {
-    this.selectedActivity = this.activityRegistry.get(id);
-    this.editMode = false;
-  };
-
-  // Catch all function for wrapping async api calls
-  private catchAsync = (fn: Function) => {
-    return async (...args: any) => {
-      try {
-        return await fn(...args);
-      } catch (e) {
-        runInAction(() => {
-          this.submitting = false;
-        });
-        toast.error(e.message);
-        throw e;
-      }
-    };
-  };
-
   /**
    * GET all activities from the API
    */
-  getAllActivities = this.catchAsync(async () => {
-    this.loadingInitial = true;
+  getAllActivities = catchAsync(async () => {
+    this.rootStore.guiStore.loadingInitial = true;
 
     const newActivities = await agent.activitiesApi.getAll();
 
@@ -112,17 +40,18 @@ class ActivityStore {
         this.activityRegistry.set(a.id, a);
       });
 
-      this.loadingInitial = false;
+      this.rootStore.guiStore.loadingInitial = false;
     });
   });
+
   /**
    * GET one activity from the API
    */
-  getOneActivity = this.catchAsync(async (id: string) => {
+  getOneActivity = catchAsync(async (id: string) => {
     let activity = this.activityRegistry.get(id);
 
     if (!activity && id) {
-      this.loadingInitial = true;
+      this.rootStore.guiStore.loadingInitial = true;
       activity = await agent.activitiesApi.getOne(id);
     }
 
@@ -131,11 +60,23 @@ class ActivityStore {
       activity.time = activity.date;
       this.selectedActivity = activity;
       this.activityRegistry.set(id, activity);
-      this.loadingInitial = false;
+      this.rootStore.guiStore.loadingInitial = false;
       return activity;
     });
   });
-
+  /**
+   * Set the selected activity observable to null
+   */
+  clearSelectedActivity = () => {
+    this.selectedActivity = DEFAULT_ACTIVITY;
+  };
+  /**
+   * Set the selected activity observable to an activity from the registry
+   */
+  setSelectedActivity = (id: string | null) => {
+    this.selectedActivity = this.activityRegistry.get(id);
+    this.rootStore.guiStore.editMode = false;
+  };
   /**
    * Utility method to process redundant API calls
    */
@@ -144,47 +85,50 @@ class ActivityStore {
     registryAction: Function,
     activity: IActivity = DEFAULT_ACTIVITY
   ) => {
-    this.submitting = true;
+    this.rootStore.guiStore.submitting = true;
     await apiCall();
 
     runInAction(() => {
-      this.submitting = false;
+      this.rootStore.guiStore.submitting = false;
 
       registryAction();
       this.selectedActivity = activity;
-      this.editMode = false;
+      this.rootStore.guiStore.editMode = false;
       history.push(`/activities/${activity.id}`);
     });
   };
-
   /**
    * POST one activity to the API
    */
-  createOneActivity = this.catchAsync(
-    async (activity: IActivity) =>
-      await this.processActivity(
-        () => agent.activitiesApi.createOne(activity),
-        () => this.activityRegistry.set(activity.id, activity),
-        activity
-      )
-  );
+  createOneActivity = catchAsync(async (activity: IActivity) => {
+    await this.processActivity(
+      () => agent.activitiesApi.createOne(activity),
+      () => this.activityRegistry.set(activity.id, activity),
+      activity
+    );
+    runInAction(() => {
+      this.rootStore.guiStore.submitting = false;
+    });
+  });
   /**
    * PUT one activity in the API
    */
-  editOneActivity = this.catchAsync(
-    async (activity: IActivity) =>
-      await this.processActivity(
-        () => agent.activitiesApi.updateOne(activity),
-        () => this.activityRegistry.set(activity.id, activity),
-        activity
-      )
-  );
+  editOneActivity = catchAsync(async (activity: IActivity) => {
+    await this.processActivity(
+      () => agent.activitiesApi.updateOne(activity),
+      () => this.activityRegistry.set(activity.id, activity),
+      activity
+    );
+    runInAction(() => {
+      this.rootStore.guiStore.submitting = false;
+    });
+  });
   /**
    * DELETE one activity from the API
    */
-  deleteOneActivity = this.catchAsync(
+  deleteOneActivity = catchAsync(
     async (e: SyntheticEvent<HTMLButtonElement>, id: string) => {
-      this.target = e.currentTarget.name;
+      this.rootStore.guiStore.target = e.currentTarget.name;
 
       await this.processActivity(
         () => agent.activitiesApi.deleteOne(id),
@@ -194,12 +138,20 @@ class ActivityStore {
       runInAction(() => {
         if (this.selectedActivity?.id === id) {
           this.selectedActivity = DEFAULT_ACTIVITY;
-          this.editMode = false;
+          this.rootStore.guiStore.editMode = false;
         }
       });
     }
   );
-}
 
-const ActivityContext = createContext(new ActivityStore());
-export default ActivityContext;
+  constructor(rootStore: RootStore) {
+    this.rootStore = rootStore;
+    makeAutoObservable(this);
+  }
+
+  // * Computed
+  get activitiesByDate() {
+    const activityArr = Array.from(this.activityRegistry.values());
+    return groupActivitiesByDate(activityArr);
+  }
+}
