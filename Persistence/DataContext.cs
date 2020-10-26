@@ -13,6 +13,8 @@ namespace Persistence
 
         public DbSet<UserEvent> UserEvents { get; set; }
 
+        public DbSet<Photo> Photos { get; set; }
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.ApplyConfiguration(new EventConfiguration());

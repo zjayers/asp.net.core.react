@@ -5,6 +5,7 @@ using Core;
 using Core.Interfaces;
 using Domain;
 using FluentValidation.AspNetCore;
+using Infrastructure.PhotoUpload;
 using Infrastructure.Security;
 using MediatR;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -97,6 +98,10 @@ namespace API
 
             // Setup HTTP Context username extractor
             services.AddScoped<IUserAccessor, UserAccessor>();
+
+            // Setup Cloudinary Photo Upload
+            services.Configure<CloudinarySettings>(Configuration.GetSection("Cloudinary"));
+            services.AddScoped<IPhotoAccessor, PhotoAccessor>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
