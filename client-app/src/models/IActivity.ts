@@ -1,3 +1,5 @@
+import { IAttendee } from "./IAttendee";
+
 export interface IActivity {
   id: string;
   title: string;
@@ -7,4 +9,7 @@ export interface IActivity {
   time?: Date;
   city: string;
   venue: string;
+  attendees: IAttendee[];
+  isGoing: boolean;
+  isHost: boolean;
 }

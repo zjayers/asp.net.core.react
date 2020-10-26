@@ -1,19 +1,16 @@
 using System;
-using System.Collections.Generic;
 using Domain;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace Persistence.EntityConfigurations
 {
-    public class ActivityConfiguration : IEntityTypeConfiguration<Activity>
+    public class EventConfiguration : IEntityTypeConfiguration<Event>
     {
-        public void Configure(EntityTypeBuilder<Activity> builder)
+        public void Configure(EntityTypeBuilder<Event> builder)
         {
-
-
             builder.HasData(
-                new Activity
+                new Event
                 {
                     Id = SeedIds.ActivityId1,
                     Title = "Past Activity 1",
@@ -21,9 +18,9 @@ namespace Persistence.EntityConfigurations
                     Description = "Activity 2 months ago",
                     Category = "drinks",
                     City = "London",
-                    Venue = "Pub",
+                    Venue = "Pub"
                 },
-                new Activity
+                new Event
                 {
                     Id = SeedIds.ActivityId2,
                     Title = "Past Activity 2",
@@ -31,9 +28,9 @@ namespace Persistence.EntityConfigurations
                     Description = "Activity 1 month ago",
                     Category = "culture",
                     City = "Paris",
-                    Venue = "Louvre",
+                    Venue = "Louvre"
                 },
-                new Activity
+                new Event
                 {
                     Id = SeedIds.ActivityId3,
                     Title = "Future Activity 1",
@@ -41,9 +38,9 @@ namespace Persistence.EntityConfigurations
                     Description = "Activity 1 month in future",
                     Category = "culture",
                     City = "London",
-                    Venue = "Natural History Museum",
+                    Venue = "Natural History Museum"
                 },
-                new Activity
+                new Event
                 {
                     Id = SeedIds.ActivityId4,
                     Title = "Future Activity 2",
@@ -51,7 +48,7 @@ namespace Persistence.EntityConfigurations
                     Description = "Activity 2 months in future",
                     Category = "music",
                     City = "London",
-                    Venue = "O2 Arena",
+                    Venue = "O2 Arena"
                 });
         }
     }

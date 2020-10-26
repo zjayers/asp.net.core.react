@@ -1,11 +1,9 @@
 using System;
 using System.Collections.Generic;
-using Domain;
-using FluentValidation;
 
-namespace Core.DTO
+namespace Domain
 {
-    public class ActivityDto
+    public class Event
     {
         public Guid Id { get; set; }
         public string Title { get; set; }
@@ -15,7 +13,6 @@ namespace Core.DTO
         public string City { get; set; }
         public string Venue { get; set; }
 
-        public ICollection<AttendeeDto> Attendees { get; set; }
-
+        public virtual ICollection<UserEvent> UserEvents { get; set; }
     }
 }

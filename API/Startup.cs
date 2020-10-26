@@ -14,12 +14,10 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc.Authorization;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
 using Persistence;
-
 
 namespace API
 {
@@ -74,10 +72,8 @@ namespace API
             // Setup Authorization Requirements For Paths
             services.AddAuthorization(opt =>
             {
-                opt.AddPolicy("IsActivityHost", policy =>
-                {
-                    policy.Requirements.Add(new IsHostAuthRequirement());
-                });
+                opt.AddPolicy("IsActivityHost",
+                    policy => { policy.Requirements.Add(new IsHostAuthRequirement()); });
             });
 
             services.AddTransient<IAuthorizationHandler, IsHostAuthRequirementHandler>();
@@ -87,7 +83,7 @@ namespace API
 
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(opt =>
             {
-                opt.TokenValidationParameters = new TokenValidationParameters()
+                opt.TokenValidationParameters = new TokenValidationParameters
                 {
                     ValidateIssuerSigningKey = true,
                     IssuerSigningKey = key,

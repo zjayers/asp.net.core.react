@@ -5,8 +5,8 @@ namespace Core.Errors
 {
     public class RestException : Exception
     {
-        public  HttpStatusCode StatusCode;
-        public  object Errors;
+        public object Errors;
+        public HttpStatusCode StatusCode;
 
         public RestException(HttpStatusCode statusCode, object errors = null)
         {

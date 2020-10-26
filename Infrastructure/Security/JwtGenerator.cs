@@ -19,8 +19,9 @@ namespace Infrastructure.Security
         public JwtGenerator(IConfiguration configuration)
         {
             _configuration = configuration;
-            _key =  new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration["TokenKey"]));
+            _key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration["TokenKey"]));
         }
+
         public string CreateToken(AppUser user)
         {
             // Setup token claims
@@ -33,7 +34,7 @@ namespace Infrastructure.Security
             var credentials = new SigningCredentials(_key, SecurityAlgorithms.HmacSha512Signature);
 
             // Create the token descriptor
-            var tokenDescriptor = new SecurityTokenDescriptor()
+            var tokenDescriptor = new SecurityTokenDescriptor
             {
                 Subject = new ClaimsIdentity(claims),
                 Expires = DateTime.Now.AddDays(7),

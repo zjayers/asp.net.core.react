@@ -64,13 +64,15 @@ const requests = {
 };
 
 /* Specialized Requests for Activities */
-const activitiesApi = {
-  getAll: (): Promise<IActivity[]> => requests.get("/activities"),
-  getOne: (id: string): Promise<IActivity> => requests.get(`/activities/${id}`),
-  createOne: (activity: IActivity) => requests.post("/activities", activity),
+const eventsApi = {
+  getAll: (): Promise<IActivity[]> => requests.get("/events"),
+  getOne: (id: string): Promise<IActivity> => requests.get(`/events/${id}`),
+  createOne: (activity: IActivity) => requests.post("/events", activity),
+  createAttendee: (id: string) => requests.post(`/events/${id}/attend`, {}),
   updateOne: (activity: IActivity) =>
-    requests.put(`/activities/${activity.id}`, activity),
-  deleteOne: (id: string) => requests.delete(`/activities/${id}`),
+    requests.put(`/events/${activity.id}`, activity),
+  deleteOne: (id: string) => requests.delete(`/events/${id}`),
+  removeAttendee: (id: string) => requests.delete(`/events/${id}/attend`),
 };
 
 const usersApi = {
@@ -82,6 +84,6 @@ const usersApi = {
 };
 
 export default {
-  activitiesApi,
+  activitiesApi: eventsApi,
   usersApi,
 };

@@ -5,12 +5,10 @@ using AutoMapper;
 using Core.DTO;
 using Core.Errors;
 using Core.Interfaces;
-using Core.Validators;
 using Domain;
 using FluentValidation;
 using MediatR;
 using Microsoft.AspNetCore.Identity;
-using Persistence;
 
 namespace Core.Auth
 {
@@ -33,12 +31,13 @@ namespace Core.Auth
 
         public class Handler : IRequestHandler<Query, AppUserDto>
         {
-            private readonly UserManager<AppUser> _userManager;
-            private readonly SignInManager<AppUser> _signInManager;
             private readonly IJwtGenerator _jwtGenerator;
             private readonly IMapper _mapper;
+            private readonly SignInManager<AppUser> _signInManager;
+            private readonly UserManager<AppUser> _userManager;
 
-            public Handler(UserManager<AppUser> userManager, SignInManager<AppUser> signInManager, IJwtGenerator jwtGenerator, IMapper mapper)
+            public Handler(UserManager<AppUser> userManager, SignInManager<AppUser> signInManager,
+                IJwtGenerator jwtGenerator, IMapper mapper)
             {
                 _userManager = userManager;
                 _signInManager = signInManager;
@@ -51,9 +50,7 @@ namespace Core.Auth
                 var user = await _userManager.FindByEmailAsync(request.Email);
 
                 if (user == null)
-                {
                     throw new RestException(HttpStatusCode.Unauthorized, new {activity = "User was null"});
-                }
 
                 var result = await _signInManager.CheckPasswordSignInAsync(user, request.Password, false);
 

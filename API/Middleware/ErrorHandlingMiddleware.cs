@@ -10,8 +10,8 @@ namespace API.Middleware
 {
     public class ErrorHandlingMiddleware
     {
-        private readonly RequestDelegate _next;
         private readonly ILogger<ErrorHandlingMiddleware> _logger;
+        private readonly RequestDelegate _next;
 
         public ErrorHandlingMiddleware(RequestDelegate next, ILogger<ErrorHandlingMiddleware> logger)
         {

@@ -12,8 +12,8 @@ namespace Infrastructure.Security
 
     public class IsHostAuthRequirementHandler : AuthorizationHandler<IsHostAuthRequirement>
     {
-        private readonly IHttpContextAccessor _httpContextAccessor;
         private readonly DataContext _context;
+        private readonly IHttpContextAccessor _httpContextAccessor;
 
         public IsHostAuthRequirementHandler(IHttpContextAccessor httpContextAccessor, DataContext context)
         {
@@ -30,9 +30,9 @@ namespace Infrastructure.Security
             var activityId = Guid.Parse(_httpContextAccessor.HttpContext.Request.RouteValues
                 .SingleOrDefault(x => x.Key == "id").Value.ToString() ?? "");
 
-            var activity = _context.Activities.FindAsync(activityId).Result;
+            var activity = _context.Events.FindAsync(activityId).Result;
 
-            var host = activity.UserActivities.FirstOrDefault(x => x.IsHost);
+            var host = activity.UserEvents.FirstOrDefault(x => x.IsHost);
 
             if (host?.AppUser?.UserName == currentUserName)
                 context.Succeed(requirement);

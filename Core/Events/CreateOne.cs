@@ -1,5 +1,4 @@
 using System;
-using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using AutoMapper;
@@ -11,11 +10,11 @@ using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Persistence;
 
-namespace Core.Activities
+namespace Core.Events
 {
     public class CreateOne
     {
-        public class Command : ActivityDto, IRequest { }
+        public class Command : EventDto, IRequest { }
 
         public class CommandValidator : AbstractValidator<Command>
         {
@@ -45,21 +44,22 @@ namespace Core.Activities
 
             public async Task<Unit> Handle(Command request, CancellationToken cancellationToken)
             {
-                var activity = _mapper.Map<Command, Activity>(request);
+                var activity = _mapper.Map<Command, Domain.Event>(request);
 
-                _context.Activities.Add(activity);
+                _context.Events.Add(activity);
 
-                var user = await _context.Users.SingleOrDefaultAsync(au => au.UserName == _userAccessor.GetCurrentUsername());
+                var user = await _context.Users.SingleOrDefaultAsync(au =>
+                    au.UserName == _userAccessor.GetCurrentUsername());
 
-                var attendee = new UserActivity()
+                var attendee = new UserEvent
                 {
                     AppUser = user,
-                    Activity = activity,
+                    Event = activity,
                     IsHost = true,
                     DateJoined = DateTime.Now
                 };
 
-                _context.UserActivities.Add(attendee);
+                _context.UserEvents.Add(attendee);
 
                 var numberOfSuccessfulSaves = await _context.SaveChangesAsync();
                 var successful = numberOfSuccessfulSaves > 0;

@@ -13,7 +13,7 @@ import { Button, Form, Grid, Segment } from "semantic-ui-react";
 import { v4 as uuid } from "uuid";
 import { IActivity } from "../../../../models";
 import { combinedDateAndTime } from "../../../../util/combine-date-and-time";
-import { categoryOptions } from "../../../data/category-options";
+import { categoryOptions } from "../../../../store/data/category-options";
 import { useActivityStore } from "../../../hooks/useActivityStore";
 import { useGuiStore } from "../../../hooks/useGuiStore";
 

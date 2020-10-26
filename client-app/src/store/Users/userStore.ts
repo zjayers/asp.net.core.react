@@ -1,8 +1,8 @@
 import { autorun, makeAutoObservable, reaction, runInAction } from "mobx";
-import agent from "../../../api/agent";
-import { IUser, IUserFormValues } from "../../../models";
-import { catchAsync } from "../../../util/catch-async";
-import { history } from "../../features/browser-history";
+import agent from "../../api/agent";
+import { IUser, IUserFormValues } from "../../models";
+import { catchAsync } from "../../util/catch-async";
+import { history } from "../../app/features/browser-history";
 import { RootStore } from "../index";
 
 export default class UserStore {

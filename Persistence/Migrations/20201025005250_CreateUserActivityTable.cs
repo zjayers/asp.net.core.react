@@ -8,8 +8,8 @@ namespace Persistence.Migrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
-                name: "UserActivities",
-                columns: table => new
+                "UserActivities",
+                table => new
                 {
                     AppUserId = table.Column<string>(nullable: false),
                     ActivityId = table.Column<Guid>(nullable: false),
@@ -18,31 +18,31 @@ namespace Persistence.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_UserActivities", x => new { x.AppUserId, x.ActivityId });
+                    table.PrimaryKey("PK_UserActivities", x => new {x.AppUserId, x.ActivityId});
                     table.ForeignKey(
-                        name: "FK_UserActivities_Activities_ActivityId",
-                        column: x => x.ActivityId,
-                        principalTable: "Activities",
-                        principalColumn: "Id",
+                        "FK_UserActivities_Activities_ActivityId",
+                        x => x.ActivityId,
+                        "Activities",
+                        "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_UserActivities_AspNetUsers_AppUserId",
-                        column: x => x.AppUserId,
-                        principalTable: "AspNetUsers",
-                        principalColumn: "Id",
+                        "FK_UserActivities_AspNetUsers_AppUserId",
+                        x => x.AppUserId,
+                        "AspNetUsers",
+                        "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_UserActivities_ActivityId",
-                table: "UserActivities",
-                column: "ActivityId");
+                "IX_UserActivities_ActivityId",
+                "UserActivities",
+                "ActivityId");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "UserActivities");
+                "UserActivities");
         }
     }
 }

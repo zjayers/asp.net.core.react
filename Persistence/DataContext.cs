@@ -1,8 +1,6 @@
-﻿using System;
-using Domain;
+﻿using Domain;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
 using Persistence.EntityConfigurations;
 
 namespace Persistence
@@ -11,17 +9,15 @@ namespace Persistence
     {
         public DataContext(DbContextOptions options) : base(options) { }
 
-        public DbSet<Value> Values { get; set; }
-        public DbSet<Activity> Activities { get; set; }
+        public DbSet<Event> Events { get; set; }
 
-        public DbSet<UserActivity> UserActivities { get; set; }
+        public DbSet<UserEvent> UserEvents { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.ApplyConfiguration(new ValueConfiguration());
-            modelBuilder.ApplyConfiguration(new ActivityConfiguration());
+            modelBuilder.ApplyConfiguration(new EventConfiguration());
             modelBuilder.ApplyConfiguration(new AppUserConfiguration());
-            modelBuilder.ApplyConfiguration(new UserActivityConfiguration());
+            modelBuilder.ApplyConfiguration(new UserEventConfiguration());
 
             base.OnModelCreating(modelBuilder);
         }

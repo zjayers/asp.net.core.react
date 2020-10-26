@@ -5,15 +5,28 @@ using System.Threading.Tasks;
 using AutoMapper;
 using Core.DTO;
 using Core.Errors;
-using Domain;
+using FluentValidation;
 using MediatR;
 using Persistence;
 
-namespace Core.Activities
+namespace Core.Events
 {
-    public class DeleteOne
+    public class EditOne
     {
-        public class Command : ActivityDto, IRequest { }
+        public class Command : EventDto, IRequest { }
+
+        public class CommandValidator : AbstractValidator<Command>
+        {
+            public CommandValidator()
+            {
+                RuleFor(x => x.Title).NotEmpty();
+                RuleFor(x => x.Description).NotEmpty();
+                RuleFor(x => x.Category).NotEmpty();
+                RuleFor(x => x.Date).NotEmpty();
+                RuleFor(x => x.City).NotEmpty();
+                RuleFor(x => x.Venue).NotEmpty();
+            }
+        }
 
         public class Handler : IRequestHandler<Command>
         {
@@ -28,15 +41,14 @@ namespace Core.Activities
 
             public async Task<Unit> Handle(Command request, CancellationToken cancellationToken)
             {
-                var activity = _mapper.Map<Command, Activity>(request);
-
-                var activityInDb = await _context.Activities.FindAsync(activity.Id);
+                // Command logic goes here
+                var activityInDb = await _context.Events.FindAsync(request.Id);
 
                 if (activityInDb == null)
                     throw new RestException(HttpStatusCode.NotFound,
                         new {activity = "Could not find activity in database!"});
 
-                _context.Remove(activityInDb);
+                _mapper.Map(request, activityInDb);
 
                 var numberOfSuccessfulSaves = await _context.SaveChangesAsync();
                 var successful = numberOfSuccessfulSaves > 0;

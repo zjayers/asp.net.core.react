@@ -5,21 +5,19 @@ using System.Threading.Tasks;
 using AutoMapper;
 using Core.DTO;
 using Core.Errors;
-using Domain;
 using MediatR;
-using Microsoft.EntityFrameworkCore;
 using Persistence;
 
-namespace Core.Activities
+namespace Core.Events
 {
     public class GetOne
     {
-        public class Query : IRequest<ActivityDto>
+        public class Query : IRequest<EventDto>
         {
             public Guid Id { get; set; }
         }
 
-        public class Handler : IRequestHandler<Query, ActivityDto>
+        public class Handler : IRequestHandler<Query, EventDto>
         {
             private readonly DataContext _context;
             private readonly IMapper _mapper;
@@ -30,16 +28,15 @@ namespace Core.Activities
                 _mapper = mapper;
             }
 
-            public async Task<ActivityDto> Handle(Query request, CancellationToken cancellationToken)
+            public async Task<EventDto> Handle(Query request, CancellationToken cancellationToken)
             {
-
-                var activity = await _context.Activities.FindAsync(request.Id);
+                var activity = await _context.Events.FindAsync(request.Id);
 
                 if (activity == null)
                     throw new RestException(HttpStatusCode.NotFound,
                         new {activity = "Could not find activity in database!"});
 
-                return _mapper.Map<Activity, ActivityDto>(activity);
+                return _mapper.Map<Domain.Event, EventDto>(activity);
             }
         }
     }

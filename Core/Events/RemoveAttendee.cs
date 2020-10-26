@@ -9,7 +9,7 @@ using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Persistence;
 
-namespace Core.Activities
+namespace Core.Events
 {
     public class RemoveAttendee
     {
@@ -34,26 +34,28 @@ namespace Core.Activities
             public async Task<Unit> Handle(Command request, CancellationToken cancellationToken)
             {
                 // Command logic goes here
-                var activity = await _context.Activities.FindAsync(request.Id);
+                var activity = await _context.Events.FindAsync(request.Id);
                 if (activity == null)
                     throw new RestException(HttpStatusCode.NotFound,
                         new {Activity = "Could not find activity"});
 
-                var user = await _context.Users.SingleOrDefaultAsync(u => u.UserName == _userAccessor.GetCurrentUsername());
+                var user = await _context.Users.SingleOrDefaultAsync(u =>
+                    u.UserName == _userAccessor.GetCurrentUsername());
                 if (user == null)
                     throw new RestException(HttpStatusCode.NotFound,
                         new {Activity = "Could not find user"});
 
-                var attendance = await _context.UserActivities
+                var attendance = await _context.UserEvents
                     .SingleOrDefaultAsync(ua => ua.ActivityId == activity.Id && ua.AppUserId == user.Id);
 
                 if (attendance == null)
                     return Unit.Value;
 
                 if (attendance.IsHost)
-                    throw new RestException(HttpStatusCode.BadRequest, new {Attendance = "You cannot remove yourself from an event you are hosting."});
+                    throw new RestException(HttpStatusCode.BadRequest,
+                        new {Attendance = "You cannot remove yourself from an event you are hosting."});
 
-                _context.UserActivities.Remove(attendance);
+                _context.UserEvents.Remove(attendance);
 
                 var numberOfSuccessfulSaves = await _context.SaveChangesAsync();
                 var successful = numberOfSuccessfulSaves > 0;

@@ -5,6 +5,8 @@ import React from "react";
 import { Link } from "react-router-dom";
 import { Button, Header, Image, Item, Segment } from "semantic-ui-react";
 import { IActivity } from "../../../../models";
+import { useActivityStore } from "../../../hooks/useActivityStore";
+import { useGuiStore } from "../../../hooks/useGuiStore";
 
 // * Styles
 const activityImageStyle = {
@@ -26,8 +28,15 @@ interface IProps {
 
 // * Component
 const ActivityDetailsHeader: React.FC<IProps> = ({
-  activity: { id, category, title, date },
+  activity: { id, category, title, date, attendees, isHost, isGoing },
 }) => {
+  const host = attendees.find((a) => a.isHost);
+  const {
+    createAttendanceForOneActivity,
+    cancelAttendanceForOneActivity,
+  } = useActivityStore();
+  const { loadingSecondary } = useGuiStore();
+
   return (
     <Segment.Group>
       <Segment basic attached="top" style={{ padding: "0" }}>
@@ -47,7 +56,7 @@ const ActivityDetailsHeader: React.FC<IProps> = ({
                 />
                 <p>{format(date, "eeee, MMMM do")}</p>
                 <p>
-                  Hosted by <strong>Bob</strong>
+                  Hosted by <strong>{host?.displayName || ""}</strong>
                 </p>
               </Item.Content>
             </Item>
@@ -55,11 +64,35 @@ const ActivityDetailsHeader: React.FC<IProps> = ({
         </Segment>
       </Segment>
       <Segment clearing attached="bottom">
-        <Button color="teal">Join Activity</Button>
-        <Button>Cancel attendance</Button>
-        <Button as={Link} to={`/manage/${id}`} color="orange" floated="right">
-          Manage Event
-        </Button>
+        {isHost ? (
+          <Button
+            loading={loadingSecondary}
+            as={Link}
+            to={`/manage/${id}`}
+            color="orange"
+            floated="right"
+            fluid
+          >
+            Manage Event
+          </Button>
+        ) : isGoing ? (
+          <Button
+            loading={loadingSecondary}
+            onClick={cancelAttendanceForOneActivity}
+            fluid
+          >
+            Cancel Attendance
+          </Button>
+        ) : (
+          <Button
+            loading={loadingSecondary}
+            onClick={createAttendanceForOneActivity}
+            fluid
+            color="teal"
+          >
+            Join Event
+          </Button>
+        )}
       </Segment>
     </Segment.Group>
   );

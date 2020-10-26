@@ -15,13 +15,13 @@ const NavBar = () => {
           <img className={"navbar-logo"} src={"/assets/logo.png"} alt="logo" />
           Lively
         </Menu.Item>
-        <Menu.Item name={"Activities"} as={NavLink} to={"/activities"} />
+        <Menu.Item name={"Events"} as={NavLink} to={"/events"} />
         <Menu.Item>
           <Button
             positive
-            content={"Create Activity"}
+            content={"Create Event"}
             as={NavLink}
-            to={"/createActivity"}
+            to={"/createEvent"}
             onClick={clearSelectedActivity}
           />
         </Menu.Item>

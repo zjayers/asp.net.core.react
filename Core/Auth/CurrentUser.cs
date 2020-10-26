@@ -8,7 +8,6 @@ using Core.Interfaces;
 using Domain;
 using MediatR;
 using Microsoft.AspNetCore.Identity;
-using Persistence;
 
 namespace Core.Auth
 {
@@ -18,13 +17,14 @@ namespace Core.Auth
 
         public class Handler : IRequestHandler<Query, AppUserDto>
         {
-            private readonly IMapper _mapper;
             private readonly IJwtGenerator _jwtGenerator;
-            private readonly UserManager<AppUser> _userManager;
+            private readonly IMapper _mapper;
             private readonly IUserAccessor _userAccessor;
+            private readonly UserManager<AppUser> _userManager;
 
 
-            public Handler(IMapper mapper, IJwtGenerator jwtGenerator, UserManager<AppUser> userManager, IUserAccessor userAccessor)
+            public Handler(IMapper mapper, IJwtGenerator jwtGenerator, UserManager<AppUser> userManager,
+                IUserAccessor userAccessor)
             {
                 _mapper = mapper;
                 _jwtGenerator = jwtGenerator;
@@ -35,10 +35,7 @@ namespace Core.Auth
             public async Task<AppUserDto> Handle(Query request, CancellationToken cancellationToken)
             {
                 var username = _userAccessor.GetCurrentUsername();
-                if (username == null)
-                {
-                    throw new RestException(HttpStatusCode.Unauthorized);
-                }
+                if (username == null) throw new RestException(HttpStatusCode.Unauthorized);
 
                 var user = await _userManager.FindByNameAsync(username);
                 var userDto = _mapper.Map<AppUser, AppUserDto>(user);

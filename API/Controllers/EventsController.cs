@@ -2,29 +2,28 @@ using System;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
-using Core.Activities;
 using Core.DTO;
-using Domain;
+using Core.Events;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace API.Controllers
 {
-    public class ActivitiesController : BaseController
+    public class EventsController : BaseController
     {
         // GET
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<ActivityDto>>> GetAllActivities(CancellationToken ct)
+        public async Task<ActionResult<IEnumerable<EventDto>>> GetAllActivities(CancellationToken ct)
         {
             return await Mediator.Send(new GetAll.Query(), ct);
         }
 
         [HttpGet("{id}")]
         [Authorize]
-        public async Task<ActionResult<ActivityDto>> GetOneActivity(Guid id)
+        public async Task<ActionResult<EventDto>> GetOneActivity(Guid id)
         {
-            return await Mediator.Send(new GetOne.Query() {Id = id});
+            return await Mediator.Send(new GetOne.Query {Id = id});
         }
 
         [HttpPost]
@@ -36,7 +35,7 @@ namespace API.Controllers
         [HttpPost("{id}/attend")]
         public async Task<ActionResult<Unit>> CreateOneAttendee(Guid id)
         {
-            return await Mediator.Send(new AddAttendee.Command() {Id = id});
+            return await Mediator.Send(new AddAttendee.Command {Id = id});
         }
 
         [HttpPut("{id}")]
@@ -51,13 +50,13 @@ namespace API.Controllers
         [Authorize(Policy = "IsActivityHost")]
         public async Task<ActionResult<Unit>> DeleteOneActivity(Guid id)
         {
-            return await Mediator.Send(new DeleteOne.Command() {Id = id});
+            return await Mediator.Send(new DeleteOne.Command {Id = id});
         }
 
         [HttpDelete("{id}/attend")]
         public async Task<ActionResult<Unit>> DeleteOneAttendee(Guid id)
         {
-            return await Mediator.Send(new RemoveAttendee.Command() {Id = id});
+            return await Mediator.Send(new RemoveAttendee.Command {Id = id});
         }
     }
 }

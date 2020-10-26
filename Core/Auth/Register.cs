@@ -1,5 +1,4 @@
 using System;
-using System.Linq;
 using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
@@ -38,9 +37,9 @@ namespace Core.Auth
         public class Handler : IRequestHandler<Command, AppUserDto>
         {
             private readonly DataContext _context;
+            private readonly IJwtGenerator _jwtGenerator;
             private readonly IMapper _mapper;
             private readonly UserManager<AppUser> _userManager;
-            private readonly IJwtGenerator _jwtGenerator;
 
             public Handler(DataContext context, IMapper mapper, UserManager<AppUser> userManager,
                 IJwtGenerator jwtGenerator)

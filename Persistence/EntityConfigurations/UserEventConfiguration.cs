@@ -5,9 +5,9 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace Persistence.EntityConfigurations
 {
-    public class UserActivityConfiguration : IEntityTypeConfiguration<UserActivity>
+    public class UserEventConfiguration : IEntityTypeConfiguration<UserEvent>
     {
-        public void Configure(EntityTypeBuilder<UserActivity> builder)
+        public void Configure(EntityTypeBuilder<UserEvent> builder)
         {
             builder.HasKey(ua => new {ua.AppUserId, ua.ActivityId});
 
@@ -17,52 +17,52 @@ namespace Persistence.EntityConfigurations
                 .HasForeignKey(ua => ua.AppUserId);
 
             builder
-                .HasOne(ua => ua.Activity)
-                .WithMany(a => a.UserActivities)
+                .HasOne(ua => ua.Event)
+                .WithMany(a => a.UserEvents)
                 .HasForeignKey(ua => ua.ActivityId);
 
             builder.HasData(
-                new UserActivity
+                new UserEvent
                 {
                     ActivityId = SeedIds.ActivityId1,
                     AppUserId = SeedIds.UserId2,
                     IsHost = true,
-                    DateJoined = DateTime.Parse("Feb 1, 2020"),
+                    DateJoined = DateTime.Parse("Feb 1, 2020")
                 },
-                new UserActivity
+                new UserEvent
                 {
                     ActivityId = SeedIds.ActivityId1,
                     AppUserId = SeedIds.UserId3,
                     IsHost = false,
-                    DateJoined = DateTime.Parse("Feb 1, 2020"),
+                    DateJoined = DateTime.Parse("Feb 1, 2020")
                 },
-                new UserActivity
+                new UserEvent
                 {
                     ActivityId = SeedIds.ActivityId2,
                     AppUserId = SeedIds.UserId1,
                     IsHost = true,
-                    DateJoined = DateTime.Parse("Mar 1, 2020"),
+                    DateJoined = DateTime.Parse("Mar 1, 2020")
                 },
-                new UserActivity
+                new UserEvent
                 {
                     ActivityId = SeedIds.ActivityId3,
                     AppUserId = SeedIds.UserId3,
                     IsHost = true,
-                    DateJoined = DateTime.Parse("Oct 1, 2020"),
+                    DateJoined = DateTime.Parse("Oct 1, 2020")
                 },
-                new UserActivity
+                new UserEvent
                 {
                     ActivityId = SeedIds.ActivityId4,
                     AppUserId = SeedIds.UserId3,
                     IsHost = true,
-                    DateJoined = DateTime.Parse("Oct 1, 2020"),
+                    DateJoined = DateTime.Parse("Oct 1, 2020")
                 },
-                new UserActivity
+                new UserEvent
                 {
                     ActivityId = SeedIds.ActivityId4,
                     AppUserId = SeedIds.UserId1,
                     IsHost = false,
-                    DateJoined = DateTime.Parse("Oct 1, 2020"),
+                    DateJoined = DateTime.Parse("Oct 1, 2020")
                 }
             );
         }

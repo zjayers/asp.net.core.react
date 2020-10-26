@@ -7,6 +7,7 @@ export default class GuiStore {
   // * Observables
   appLoaded = false;
   loadingInitial = false;
+  loadingSecondary = false;
   editMode = false;
   submitting = false;
   target = "";
