@@ -38,8 +38,8 @@ namespace Core.Activities
 
                 _context.Remove(activityInDb);
 
-                var numberOfSuccessfulySaves = await _context.SaveChangesAsync();
-                var successful = numberOfSuccessfulySaves > 0;
+                var numberOfSuccessfulSaves = await _context.SaveChangesAsync();
+                var successful = numberOfSuccessfulSaves > 0;
 
                 if (successful) return Unit.Value;
 

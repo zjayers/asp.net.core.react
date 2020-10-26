@@ -24,7 +24,6 @@ const HomePage = () => {
           />
           Lively
         </Header>
-        <Header as="h2" inverted content="Welcome to Lively" />
         <Button.Group widths={2} size={"big"}>
           <Button onClick={() => openModal(<LoginForm />)} size="huge" inverted>
             Login

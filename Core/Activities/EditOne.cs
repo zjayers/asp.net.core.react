@@ -42,19 +42,18 @@ namespace Core.Activities
 
             public async Task<Unit> Handle(Command request, CancellationToken cancellationToken)
             {
-                var activity = _mapper.Map<Command, Activity>(request);
 
                 // Command logic goes here
-                var activityInDb = await _context.Activities.FindAsync(activity.Id);
+                var activityInDb = await _context.Activities.FindAsync(request.Id);
 
-                if (activity == null)
+                if (activityInDb == null)
                     throw new RestException(HttpStatusCode.NotFound,
                         new {activity = "Could not find activity in database!"});
 
-                _mapper.Map(activity, activityInDb);
+                _mapper.Map(request, activityInDb);
 
-                var numberOfSuccessfulySaves = await _context.SaveChangesAsync();
-                var successful = numberOfSuccessfulySaves > 0;
+                var numberOfSuccessfulSaves = await _context.SaveChangesAsync();
+                var successful = numberOfSuccessfulSaves > 0;
 
                 if (successful) return Unit.Value;
 

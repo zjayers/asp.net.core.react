@@ -7,6 +7,7 @@ using Core.DTO;
 using Core.Errors;
 using Domain;
 using MediatR;
+using Microsoft.EntityFrameworkCore;
 using Persistence;
 
 namespace Core.Activities

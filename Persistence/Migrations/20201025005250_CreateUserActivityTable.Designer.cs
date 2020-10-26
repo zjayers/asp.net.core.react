@@ -2,15 +2,17 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Persistence;
 
 namespace Persistence.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20201025005250_CreateUserActivityTable")]
+    partial class CreateUserActivityTable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -57,7 +59,7 @@ namespace Persistence.Migrations
                         },
                         new
                         {
-                            Id = new Guid("94502f82-d435-40ea-992e-5746385c545c"),
+                            Id = new Guid("7a78f37f-a57c-49ae-a9a7-b6cb8a7303cc"),
                             Category = "culture",
                             City = "Paris",
                             Date = new DateTime(2020, 2, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
@@ -67,7 +69,7 @@ namespace Persistence.Migrations
                         },
                         new
                         {
-                            Id = new Guid("4c81c658-272d-41ac-b406-48b85e05fcc1"),
+                            Id = new Guid("10c98cbe-4b04-4391-ab60-c245f226894d"),
                             Category = "culture",
                             City = "London",
                             Date = new DateTime(2020, 3, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
@@ -77,13 +79,73 @@ namespace Persistence.Migrations
                         },
                         new
                         {
-                            Id = new Guid("fc2f7480-4b54-4564-b737-34ccb832f306"),
+                            Id = new Guid("43a767b8-7c7d-45ae-ad1a-dda85f671a45"),
                             Category = "music",
                             City = "London",
                             Date = new DateTime(2020, 4, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Description = "Activity 2 months in future",
                             Title = "Future Activity 2",
                             Venue = "O2 Arena"
+                        },
+                        new
+                        {
+                            Id = new Guid("cbb0c7e1-7ca2-41f4-b8c9-71ec0811bfcf"),
+                            Category = "drinks",
+                            City = "London",
+                            Date = new DateTime(2020, 5, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Description = "Activity 3 months in future",
+                            Title = "Future Activity 3",
+                            Venue = "Another pub"
+                        },
+                        new
+                        {
+                            Id = new Guid("94bc256b-25cd-4d0f-a372-fd16456a29b3"),
+                            Category = "drinks",
+                            City = "London",
+                            Date = new DateTime(2020, 6, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Description = "Activity 4 months in future",
+                            Title = "Future Activity 4",
+                            Venue = "Yet another pub"
+                        },
+                        new
+                        {
+                            Id = new Guid("d408d2ce-8640-4a63-9795-cd843dd093fb"),
+                            Category = "drinks",
+                            City = "London",
+                            Date = new DateTime(2020, 7, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Description = "Activity 5 months in future",
+                            Title = "Future Activity 5",
+                            Venue = "Just another pub"
+                        },
+                        new
+                        {
+                            Id = new Guid("a2be1f21-5af9-424f-b6fa-49b18af1be72"),
+                            Category = "music",
+                            City = "London",
+                            Date = new DateTime(2020, 8, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Description = "Activity 6 months in future",
+                            Title = "Future Activity 6",
+                            Venue = "Roundhouse Camden"
+                        },
+                        new
+                        {
+                            Id = new Guid("6220481f-afab-40ed-bb81-0eb4b6df9f5f"),
+                            Category = "travel",
+                            City = "London",
+                            Date = new DateTime(2020, 9, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Description = "Activity 2 months ago",
+                            Title = "Future Activity 7",
+                            Venue = "Somewhere on the Thames"
+                        },
+                        new
+                        {
+                            Id = new Guid("fff48d9b-b520-4c3f-a71e-4f4fe9cb2ddd"),
+                            Category = "film",
+                            City = "London",
+                            Date = new DateTime(2020, 10, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Description = "Activity 8 months in future",
+                            Title = "Future Activity 8",
+                            Venue = "Cinema"
                         });
                 });
 
@@ -156,7 +218,7 @@ namespace Persistence.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "7B01DF1A-2D77-4872-B383-7C5683035FBD",
+                            Id = "233683EE-CD2D-4B0D-97CD-34715E6D5BDF",
                             AccessFailedCount = 0,
                             ConcurrencyStamp = "5c1cbe50-290a-464b-b32d-60981bea1877",
                             DisplayName = "Bob",
@@ -173,7 +235,7 @@ namespace Persistence.Migrations
                         },
                         new
                         {
-                            Id = "D8C62AEE-ADE7-4A9F-8A26-50C20ED5F1ED",
+                            Id = "EC50E466-AE94-4D0A-BAAD-831A41191223",
                             AccessFailedCount = 0,
                             ConcurrencyStamp = "c01f9e4a-5935-43aa-a137-1cf23c8c499e",
                             DisplayName = "Tom",
@@ -190,7 +252,7 @@ namespace Persistence.Migrations
                         },
                         new
                         {
-                            Id = "F169161F-C669-4CF9-8A33-662FFFBCEB7B",
+                            Id = "DEB85499-584C-49C1-8DC4-765838874650",
                             AccessFailedCount = 0,
                             ConcurrencyStamp = "1abc3ae0-c563-4af0-aaee-bb7d6c1a0258",
                             DisplayName = "Jane",
@@ -226,50 +288,6 @@ namespace Persistence.Migrations
                     b.HasIndex("ActivityId");
 
                     b.ToTable("UserActivities");
-
-                    b.HasData(
-                        new
-                        {
-                            AppUserId = "D8C62AEE-ADE7-4A9F-8A26-50C20ED5F1ED",
-                            ActivityId = new Guid("c5d60467-2992-4878-a575-076c8b6ce32b"),
-                            DateJoined = new DateTime(2020, 2, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            IsHost = true
-                        },
-                        new
-                        {
-                            AppUserId = "F169161F-C669-4CF9-8A33-662FFFBCEB7B",
-                            ActivityId = new Guid("c5d60467-2992-4878-a575-076c8b6ce32b"),
-                            DateJoined = new DateTime(2020, 2, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            IsHost = false
-                        },
-                        new
-                        {
-                            AppUserId = "7B01DF1A-2D77-4872-B383-7C5683035FBD",
-                            ActivityId = new Guid("94502f82-d435-40ea-992e-5746385c545c"),
-                            DateJoined = new DateTime(2020, 3, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            IsHost = true
-                        },
-                        new
-                        {
-                            AppUserId = "F169161F-C669-4CF9-8A33-662FFFBCEB7B",
-                            ActivityId = new Guid("4c81c658-272d-41ac-b406-48b85e05fcc1"),
-                            DateJoined = new DateTime(2020, 10, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            IsHost = true
-                        },
-                        new
-                        {
-                            AppUserId = "F169161F-C669-4CF9-8A33-662FFFBCEB7B",
-                            ActivityId = new Guid("fc2f7480-4b54-4564-b737-34ccb832f306"),
-                            DateJoined = new DateTime(2020, 10, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            IsHost = true
-                        },
-                        new
-                        {
-                            AppUserId = "7B01DF1A-2D77-4872-B383-7C5683035FBD",
-                            ActivityId = new Guid("fc2f7480-4b54-4564-b737-34ccb832f306"),
-                            DateJoined = new DateTime(2020, 10, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            IsHost = false
-                        });
                 });
 
             modelBuilder.Entity("Domain.Value", b =>

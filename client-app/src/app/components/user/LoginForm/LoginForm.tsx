@@ -37,7 +37,7 @@ const LoginForm = () => {
         <Form onSubmit={handleSubmit} error>
           <Header
             as={"h2"}
-            content={"Login to Lively"}
+            content={"Login"}
             color={"teal"}
             textAlign={"center"}
           />

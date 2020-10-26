@@ -9,28 +9,36 @@ namespace Persistence.EntityConfigurations
     {
         public void Configure(EntityTypeBuilder<AppUser> builder)
         {
-            //a hasher to hash the password before seeding the user to the db
-            var hasher = new PasswordHasher<AppUser>();
-            var hash = hasher.HashPassword(null, "Pa$$w0rd");
-
             builder.HasData(
                 new AppUser()
                 {
-                    Id = "233683EE-CD2D-4B0D-97CD-34715E6D5BDF", DisplayName = "Bob", UserName = "bob",
+                    Id = SeedIds.UserId1, DisplayName = "Bob", UserName = "bob",
                     NormalizedUserName = "BOB", NormalizedEmail = "BOB@TEST.COM",
-                    Email = "bob@test.com", PasswordHash = hash
+                    Email = "bob@test.com",
+                    PasswordHash =
+                        "AQAAAAEAACcQAAAAEAy90BXaaDIxJm+9G2FiuKBNmjnGr4/syBRu/GTPuAZ2DbIAWNb1kl2VzC4PfBDJkA==",
+                    ConcurrencyStamp = "5c1cbe50-290a-464b-b32d-60981bea1877",
+                    SecurityStamp = "92657c22-f297-41da-984a-8deb392f5540"
                 },
                 new AppUser()
                 {
-                    Id = "EC50E466-AE94-4D0A-BAAD-831A41191223", DisplayName = "Tom", UserName = "tom",
+                    Id = SeedIds.UserId2, DisplayName = "Tom", UserName = "tom",
                     NormalizedUserName = "TOM", NormalizedEmail = "TOM@TEST.COM",
-                    Email = "tom@test.com", PasswordHash = hash
+                    Email = "tom@test.com",
+                    PasswordHash =
+                        "AQAAAAEAACcQAAAAEAy90BXaaDIxJm+9G2FiuKBNmjnGr4/syBRu/GTPuAZ2DbIAWNb1kl2VzC4PfBDJkA==",
+                    ConcurrencyStamp = "c01f9e4a-5935-43aa-a137-1cf23c8c499e",
+                    SecurityStamp = "b88d0d77-d0c7-41b1-adf0-fa43d13028db"
                 },
                 new AppUser()
                 {
-                    Id = "DEB85499-584C-49C1-8DC4-765838874650", DisplayName = "Jane", UserName = "jane",
+                    Id = SeedIds.UserId3, DisplayName = "Jane", UserName = "jane",
                     NormalizedUserName = "JANE", NormalizedEmail = "JANE@TEST.COM",
-                    Email = "jane@test.com", PasswordHash = hash
+                    Email = "jane@test.com",
+                    PasswordHash =
+                        "AQAAAAEAACcQAAAAEAy90BXaaDIxJm+9G2FiuKBNmjnGr4/syBRu/GTPuAZ2DbIAWNb1kl2VzC4PfBDJkA==",
+                    ConcurrencyStamp = "1abc3ae0-c563-4af0-aaee-bb7d6c1a0258",
+                    SecurityStamp = "87f7b445-3fa1-497f-924c-39b0f2370947"
                 });
         }
     }
