@@ -15,6 +15,10 @@ appsettings.json
 *.userosscache
 *.sln.docstates
 
+./API/wwwroot
+
+wwwroot
+
 # User-specific files (MonoDevelop/Xamarin Studio)
 *.userprefs
 

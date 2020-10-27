@@ -147,6 +147,10 @@ namespace API
 
             // app.UseHttpsRedirection();
 
+            // Look for index.html file in the wwwroot folder and use static files
+            app.UseDefaultFiles();
+            app.UseStaticFiles();
+
             // Middleware: Allow ASP.NET to route to the API controllers
             app.UseRouting();
             app.UseCors("CorsPolicy");
@@ -159,6 +163,9 @@ namespace API
             {
                 endpoints.MapControllers();
                 endpoints.MapHub<ChatHub>("/chat");
+
+                // Setup fallback route for react app (pass routes to react)
+                endpoints.MapFallbackToController("Index", "Fallback");
             });
         }
     }
