@@ -1,6 +1,8 @@
 // * Imports
+import { formatDistance } from "date-fns";
 import { observer } from "mobx-react";
 import React, { Fragment, useEffect } from "react";
+import { Field, Form as FinalForm } from "react-final-form";
 import { Link } from "react-router-dom";
 import {
   Button,
@@ -12,9 +14,7 @@ import {
 } from "semantic-ui-react";
 import { useCommentStore } from "../../../../hooks/useCommentStore";
 import { IEvent } from "../../../../models";
-import { Form as FinalForm, Field } from "react-final-form";
 import { TextAreaInput } from "../../shared";
-import { formatDistance, parse } from "date-fns";
 
 // * Interfaces
 interface IProps {
@@ -33,7 +33,7 @@ const ActivityDetailsChat: React.FC<IProps> = ({ activity }) => {
     createHubConnection(activity.id);
 
     return stopHubConnection;
-  }, [createHubConnection, stopHubConnection]);
+  }, [activity.id, createHubConnection, stopHubConnection]);
 
   return (
     <Fragment>

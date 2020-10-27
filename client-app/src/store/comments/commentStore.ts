@@ -4,7 +4,6 @@ import {
   LogLevel,
 } from "@microsoft/signalr";
 import { makeAutoObservable, observable, runInAction } from "mobx";
-import { toast } from "react-toastify";
 import { catchAsync } from "../../util/catch-async";
 import { RootStore } from "../index";
 

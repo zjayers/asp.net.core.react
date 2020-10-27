@@ -2,6 +2,7 @@ import React from "react";
 import { Tab } from "semantic-ui-react";
 import { useProfileStore } from "../../../../hooks/useProfileStore";
 import ProfileDescription from "../ProfileDescription/ProfileDescription";
+import ProfileEvents from "../ProfileEvents/ProfileEvents";
 import ProfileFollowings from "../ProfileFollowings/ProfileFollowings";
 import ProfilePhotos from "../ProfilePhotos/ProfilePhotos";
 
@@ -10,7 +11,7 @@ const panes = [
   { menuItem: "Photos", render: () => <ProfilePhotos /> },
   { menuItem: "Followers", render: () => <ProfileFollowings /> },
   { menuItem: "Following", render: () => <ProfileFollowings /> },
-  { menuItem: "Hosted Events", render: () => <Tab.Pane>Events</Tab.Pane> },
+  { menuItem: "Events", render: () => <ProfileEvents /> },
 ];
 
 const ProfileContent = () => {

@@ -5,3 +5,5 @@ export * from "./IAttendee";
 export * from "./IProfile";
 export * from "./IPhoto";
 export * from "./IComment";
+export * from "./IEventEnvelope";
+export * from "./IUserEvent";

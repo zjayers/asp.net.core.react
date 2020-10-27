@@ -1,4 +1,4 @@
 import { useContext } from "react";
 import { RootContext } from "../store";
 
-export const useActivityStore = () => useContext(RootContext).eventStore;
+export const useEventStore = () => useContext(RootContext).eventStore;

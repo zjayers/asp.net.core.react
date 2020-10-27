@@ -1,9 +1,11 @@
 /* Specialized Requests for Activities */
-import { IEvent } from "../models";
+import { IEvent, IEventEnvelope } from "../models";
 import { requests } from "./baseRequests";
 
 export const eventsApi = {
-  getAll: (): Promise<IEvent[]> => requests.get("/events"),
+  getAll: (params: URLSearchParams): Promise<IEventEnvelope> =>
+    requests.get(`/events`, params),
+
   getOne: (id: string): Promise<IEvent> => requests.get(`/events/${id}`),
   createOne: (activity: IEvent) => requests.post("/events", activity),
   createAttendee: (id: string) => requests.post(`/events/${id}/attend`, {}),

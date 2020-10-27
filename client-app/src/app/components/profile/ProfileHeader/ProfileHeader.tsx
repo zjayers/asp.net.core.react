@@ -1,14 +1,14 @@
 import { observer } from "mobx-react";
 import React from "react";
 import {
-  Segment,
-  Item,
-  Header,
   Button,
-  Grid,
-  Statistic,
   Divider,
+  Grid,
+  Header,
+  Item,
   Reveal,
+  Segment,
+  Statistic,
 } from "semantic-ui-react";
 import { useProfileStore } from "../../../../hooks/useProfileStore";
 import { IProfile } from "../../../../models";
@@ -18,7 +18,7 @@ interface IProps {
 }
 
 const ProfileHeader: React.FC<IProps> = ({ profile }) => {
-  const { follow, unFollow, isCurrentUser, loadingFollows } = useProfileStore();
+  const { follow, unFollow, isCurrentUser } = useProfileStore();
 
   return (
     <Segment>

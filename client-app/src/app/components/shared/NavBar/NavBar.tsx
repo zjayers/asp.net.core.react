@@ -2,11 +2,11 @@ import { observer } from "mobx-react";
 import React from "react";
 import { Link, NavLink } from "react-router-dom";
 import { Button, Container, Dropdown, Menu, Image } from "semantic-ui-react";
-import { useActivityStore } from "../../../../hooks/useActivityStore";
+import { useEventStore } from "../../../../hooks/useEventStore";
 import { useUserStore } from "../../../../hooks/useUserStore";
 
 const NavBar = () => {
-  const { clearSelectedActivity } = useActivityStore();
+  const { clearSelectedActivity } = useEventStore();
   const { user, logout } = useUserStore();
 
   return (

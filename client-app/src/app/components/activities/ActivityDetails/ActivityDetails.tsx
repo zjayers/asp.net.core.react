@@ -3,7 +3,7 @@ import { observer } from "mobx-react";
 import React, { useEffect } from "react";
 import { useParams } from "react-router-dom";
 import { Grid } from "semantic-ui-react";
-import { useActivityStore } from "../../../../hooks/useActivityStore";
+import { useEventStore } from "../../../../hooks/useEventStore";
 import { useGuiStore } from "../../../../hooks/useGuiStore";
 import { LoadingSpinner } from "../../shared";
 import ActivityDetailsChat from "./ActivityDetailsChat";
@@ -13,7 +13,7 @@ import ActivityDetailsSideBar from "./ActivityDetailsSideBar";
 
 // * Component
 const ActivityDetails = () => {
-  const { getOneActivity, selectedEvent } = useActivityStore();
+  const { getOneActivity, selectedEvent } = useEventStore();
   const { loadingInitial } = useGuiStore();
 
   const { id } = useParams();

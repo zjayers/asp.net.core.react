@@ -14,7 +14,7 @@ import { v4 as uuid } from "uuid";
 import { IEvent } from "../../../../models";
 import { combinedDateAndTime } from "../../../../util/combine-date-and-time";
 import { categoryOptions } from "../../../../store/data/category-options";
-import { useActivityStore } from "../../../../hooks/useActivityStore";
+import { useEventStore } from "../../../../hooks/useEventStore";
 import { useGuiStore } from "../../../../hooks/useGuiStore";
 
 import {
@@ -45,7 +45,7 @@ const ActivityForm = () => {
     editOneActivity,
     getOneActivity,
     clearSelectedActivity,
-  } = useActivityStore();
+  } = useEventStore();
 
   const { submitting } = useGuiStore();
 

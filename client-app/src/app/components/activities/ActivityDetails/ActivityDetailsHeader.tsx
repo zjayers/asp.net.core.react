@@ -5,7 +5,7 @@ import React from "react";
 import { Link } from "react-router-dom";
 import { Button, Header, Image, Item, Segment } from "semantic-ui-react";
 import { IEvent } from "../../../../models";
-import { useActivityStore } from "../../../../hooks/useActivityStore";
+import { useEventStore } from "../../../../hooks/useEventStore";
 import { useGuiStore } from "../../../../hooks/useGuiStore";
 
 // * Styles
@@ -34,7 +34,7 @@ const ActivityDetailsHeader: React.FC<IProps> = ({
   const {
     createAttendanceForOneActivity,
     cancelAttendanceForOneActivity,
-  } = useActivityStore();
+  } = useEventStore();
   const { loadingSecondary } = useGuiStore();
 
   return (

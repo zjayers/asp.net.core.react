@@ -1,6 +1,6 @@
 import { makeAutoObservable, reaction, runInAction } from "mobx";
 import { profilesApi } from "../../api";
-import { IPhoto, IProfile } from "../../models";
+import { IPhoto, IProfile, IUserEvent } from "../../models";
 import { catchAsync } from "../../util/catch-async";
 import { RootStore } from "../index";
 
@@ -13,6 +13,8 @@ export default class ProfileStore {
   loadingAvatar = false;
   loadingFollows = false;
   uploadingFile = false;
+  userEvents: IUserEvent[] = [];
+  loadingUserEvents = false;
 
   constructor(rootStore: RootStore) {
     this.rootStore = rootStore;
@@ -21,7 +23,6 @@ export default class ProfileStore {
     reaction(
       () => this.activeTab,
       async (activeTab) => {
-        console.log(activeTab);
         this.followings = [];
         switch (activeTab) {
           case 2:
@@ -46,6 +47,18 @@ export default class ProfileStore {
   setActiveTab = (activeIndex: number | string | undefined) => {
     this.activeTab = activeIndex;
   };
+
+  public getUserEvents = catchAsync(
+    async (username: string, predicate?: string) => {
+      this.loadingUserEvents = true;
+      const events = await profilesApi.getUserEvents(username, predicate!);
+      runInAction(() => {
+        this.userEvents = events;
+        this.loadingUserEvents = false;
+      });
+    },
+    () => (this.loadingUserEvents = false)
+  );
 
   loadProfile = catchAsync(
     async (username: string) => {

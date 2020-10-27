@@ -14,13 +14,13 @@ namespace API.Controllers
     {
         // GET
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<EventDto>>> GetAllActivities(CancellationToken ct)
+        public async Task<ActionResult<GetAll.EventEnvelope>> GetAllActivities(int? limit, int? offset, bool isGoing,
+            bool isHost, DateTime? startDate)
         {
-            return await Mediator.Send(new GetAll.Query(), ct);
+            return await Mediator.Send(new GetAll.Query(limit, offset, isGoing, isHost, startDate));
         }
 
         [HttpGet("{id}")]
-        [Authorize]
         public async Task<ActionResult<EventDto>> GetOneActivity(Guid id)
         {
             return await Mediator.Send(new GetOne.Query {Id = id});

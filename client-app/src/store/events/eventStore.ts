@@ -1,4 +1,4 @@
-import { makeAutoObservable, runInAction } from "mobx";
+import { makeAutoObservable, reaction, runInAction } from "mobx";
 import { SyntheticEvent } from "react";
 import { eventsApi } from "../../api";
 import { history } from "../../app/features/browser-history";
@@ -24,16 +24,30 @@ const DEFAULT_EVENT: IEvent = {
   isHost: false,
 };
 
+const LIMIT = 3;
+
 export default class EventStore {
   private rootStore: RootStore;
 
   // * Observables
   public eventRegistry = new Map();
   public selectedEvent: IEvent = DEFAULT_EVENT;
+  public eventCount = 0;
+  public eventPage = 0;
+  public queryRepository = new Map();
 
   constructor(rootStore: RootStore) {
     this.rootStore = rootStore;
     makeAutoObservable(this);
+
+    reaction(
+      () => this.queryRepository.keys(),
+      async () => {
+        this.eventPage = 0;
+        this.eventRegistry.clear();
+        await this.getAllActivities();
+      }
+    );
   }
 
   // * Computed
@@ -41,6 +55,35 @@ export default class EventStore {
     const activityArr = Array.from(this.eventRegistry.values());
     return groupActivitiesByDate(activityArr);
   }
+
+  get totalNumberOfPages() {
+    return Math.ceil(this.eventCount / LIMIT);
+  }
+
+  get queryParams() {
+    const params = new URLSearchParams();
+    params.append("limit", LIMIT.toString());
+    params.append("offset", `${this.eventPage ? this.eventPage * LIMIT : 0}`);
+    this.queryRepository.forEach((value, key) => {
+      if (key === "startDate") {
+        params.append(key, value.toISOString());
+      } else {
+        params.append(key, value);
+      }
+    });
+    return params;
+  }
+
+  public setQueryRepository = (predicate: string, value: string | Date) => {
+    this.queryRepository.clear();
+    if (predicate !== "all") {
+      this.queryRepository.set(predicate, value);
+    }
+  };
+
+  public setPageNumber = (page: number) => {
+    this.eventPage = page;
+  };
 
   public clearSelectedActivity = () => {
     this.selectedEvent = DEFAULT_EVENT;
@@ -117,15 +160,15 @@ export default class EventStore {
 
     const currentUser = this.rootStore.userStore.user!;
 
-    const newActivities = await eventsApi.getAll();
+    const { events, eventCount } = await eventsApi.getAll(this.queryParams);
 
     runInAction(() => {
-      newActivities.forEach((a) => {
+      events.forEach((a) => {
         setActivityDateTime(a);
         checkActivityAttendeeProps(a, currentUser);
         this.eventRegistry.set(a.id, a);
       });
-
+      this.eventCount = eventCount;
       this.rootStore.guiStore.loadingInitial = false;
     });
   }, this.resetLoadingIndicators);

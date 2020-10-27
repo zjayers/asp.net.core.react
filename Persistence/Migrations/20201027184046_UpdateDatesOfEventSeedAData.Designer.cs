@@ -2,15 +2,17 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Persistence;
 
 namespace Persistence.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20201027184046_UpdateDatesOfEventSeedAData")]
+    partial class UpdateDatesOfEventSeedAData
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -201,8 +203,8 @@ namespace Persistence.Migrations
                             Category = "drinks",
                             City = "London",
                             Date = new DateTime(2021, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Description = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
-                            Title = "Future Activity 1",
+                            Description = "Activity 2 months ago",
+                            Title = "Past Activity 1",
                             Venue = "Pub"
                         },
                         new
@@ -211,8 +213,8 @@ namespace Persistence.Migrations
                             Category = "culture",
                             City = "Paris",
                             Date = new DateTime(2021, 2, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Description = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
-                            Title = "Future Activity 2",
+                            Description = "Activity 1 month ago",
+                            Title = "Past Activity 2",
                             Venue = "Louvre"
                         },
                         new
@@ -221,8 +223,8 @@ namespace Persistence.Migrations
                             Category = "culture",
                             City = "London",
                             Date = new DateTime(2021, 3, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Description = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
-                            Title = "Future Activity 3",
+                            Description = "Activity 1 month in future",
+                            Title = "Future Activity 1",
                             Venue = "Natural History Museum"
                         },
                         new
@@ -231,8 +233,8 @@ namespace Persistence.Migrations
                             Category = "music",
                             City = "London",
                             Date = new DateTime(2021, 4, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Description = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
-                            Title = "Future Activity 4",
+                            Description = "Activity 2 months in future",
+                            Title = "Future Activity 2",
                             Venue = "O2 Arena"
                         });
                 });

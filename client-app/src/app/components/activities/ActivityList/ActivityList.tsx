@@ -2,13 +2,13 @@
 import { observer } from "mobx-react";
 import React, { Fragment } from "react";
 import { Item, Label } from "semantic-ui-react";
-import { useActivityStore } from "../../../../hooks/useActivityStore";
+import { useEventStore } from "../../../../hooks/useEventStore";
 import ActivityItem from "../ActivityItem/ActivityItem";
 import { format } from "date-fns";
 
 // * Component
 const ActivityList = () => {
-  const { activitiesByDate } = useActivityStore();
+  const { activitiesByDate } = useEventStore();
 
   return (
     <Fragment>

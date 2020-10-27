@@ -6,6 +6,8 @@ export const profilesApi = {
     requests.get(`/profiles/${username}`),
   getFollowings: (username: string, predicate: string) =>
     requests.get(`/profiles/${username}/follow?predicate=${predicate}`),
+  getUserEvents: (username: string, predicate: string) =>
+    requests.get(`/profiles/${username}/events?predicate=${predicate}`),
   updateProfile: (profile: Partial<IProfile>) =>
     requests.put("/profiles", profile),
   uploadPhoto(photo: string): Promise<IPhoto> {

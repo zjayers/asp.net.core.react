@@ -5,7 +5,7 @@ import React from "react";
 import { Link } from "react-router-dom";
 import { Button, Icon, Item, Label, Segment } from "semantic-ui-react";
 import { IEvent } from "../../../../models";
-import { useActivityStore } from "../../../../hooks/useActivityStore";
+import { useEventStore } from "../../../../hooks/useEventStore";
 import AttendeesList from "../AttendeesList/AttendeesList";
 
 // * Interfaces
@@ -28,7 +28,7 @@ const ActivityItem: React.FC<IProps> = ({
     id,
   },
 }) => {
-  const { setSelectedActivity } = useActivityStore();
+  const { setSelectedActivity } = useEventStore();
   const host = attendees.find((a) => a.isHost);
   return (
     <Segment.Group>
@@ -83,15 +83,17 @@ const ActivityItem: React.FC<IProps> = ({
         <AttendeesList attendees={attendees} />
       </Segment>
       <Segment clearing>
-        <span>{description}</span>
-        <Button
-          as={Link}
-          to={`/events/${id}`}
-          floated={"right"}
-          content={"View"}
-          color={"blue"}
-          onClick={() => setSelectedActivity(id)}
-        />
+        <div style={{ display: "flex" }}>
+          <span style={{ paddingRight: 20 }}>{description}</span>
+          <Button
+            as={Link}
+            to={`/events/${id}`}
+            floated={"right"}
+            content={"View"}
+            color={"blue"}
+            onClick={() => setSelectedActivity(id)}
+          />
+        </div>
       </Segment>
     </Segment.Group>
   );

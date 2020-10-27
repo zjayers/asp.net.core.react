@@ -5,7 +5,8 @@ import axios, { AxiosResponse } from "axios";
 const responseBody = (response: AxiosResponse) => response.data;
 
 export const requests = {
-  get: (url: string) => axios.get(url).then(responseBody),
+  get: (url: string, params?: any) =>
+    axios.get(url, { params }).then(responseBody),
   post: (url: string, body: {}) => axios.post(url, body).then(responseBody),
   postForm: async (url: string, file: string) => {
     const formData = new FormData();
