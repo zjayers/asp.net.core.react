@@ -27,7 +27,7 @@ export default class CommentStore {
       .withUrl("http://localhost:5000/chat", {
         accessTokenFactory: () => this.rootStore.userStore.token!,
       })
-      .configureLogging(LogLevel.Information)
+      .configureLogging(LogLevel.Critical)
       .build();
 
     this.hubConnection

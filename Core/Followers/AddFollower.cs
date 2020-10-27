@@ -1,35 +1,26 @@
 using System;
+using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
 using AutoMapper;
-using Core.Dto;
+using Core.Errors;
 using Core.Interfaces;
 using Domain;
-using FluentValidation;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Persistence;
 
-namespace Core.Events
+namespace Core.Followers
 {
-    public class CreateOne
+    public class AddFollower
     {
-        public class Command : EventDto, IRequest { }
-
-        public class CommandValidator : AbstractValidator<Command>
+        public class Command : IRequest
         {
-            public CommandValidator()
-            {
-                RuleFor(x => x.Title).NotEmpty();
-                RuleFor(x => x.Description).NotEmpty();
-                RuleFor(x => x.Category).NotEmpty();
-                RuleFor(x => x.Date).NotEmpty();
-                RuleFor(x => x.City).NotEmpty();
-                RuleFor(x => x.Venue).NotEmpty();
-            }
+            public string UserName { get; set; }
         }
 
         public class Handler : IRequestHandler<Command>
+
         {
             private readonly DataContext _context;
             private readonly IMapper _mapper;
@@ -44,22 +35,29 @@ namespace Core.Events
 
             public async Task<Unit> Handle(Command request, CancellationToken cancellationToken)
             {
-                var activity = _mapper.Map<Command, Domain.Event>(request);
 
-                _context.Events.Add(activity);
+                var observer =
+                    await _context.Users.SingleOrDefaultAsync(u => u.UserName == _userAccessor.GetCurrentUsername());
 
-                var user = await _context.Users.SingleOrDefaultAsync(au =>
-                    au.UserName == _userAccessor.GetCurrentUsername());
+                var target = await _context.Users.SingleOrDefaultAsync(u => u.UserName == request.UserName);
 
-                var attendee = new UserEvent
+                if (target == null)
+                    throw new RestException(HttpStatusCode.NotFound, new {User = "Not found"});
+
+                var following =
+                    await _context.Followings.SingleOrDefaultAsync(f =>
+                        f.ObserverId == observer.Id && f.TargetId == target.Id);
+
+                if (following != null)
+                    throw new RestException(HttpStatusCode.BadRequest, new {User = "You are already following this user."});
+
+                following = new UserFollowing()
                 {
-                    AppUser = user,
-                    Event = activity,
-                    IsHost = true,
-                    DateJoined = DateTime.Now
+                    Observer = observer,
+                    Target = target
                 };
 
-                _context.UserEvents.Add(attendee);
+                _context.Followings.Add(following);
 
                 var numberOfSuccessfulSaves = await _context.SaveChangesAsync();
                 var successful = numberOfSuccessfulSaves > 0;

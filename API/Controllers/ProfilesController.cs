@@ -1,6 +1,6 @@
 using System.Threading.Tasks;
 using AutoMapper;
-using Core.UserProfile;
+using Core.UserProfiles;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 

@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using AutoMapper;
-using Core.DTO;
+using Core.Dto;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Persistence;

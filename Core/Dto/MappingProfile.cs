@@ -1,6 +1,6 @@
 using System.Linq;
 using AutoMapper;
-using Core.DTO;
+using Core.Dto.Resolvers;
 using Domain;
 
 namespace Core.Dto
@@ -10,14 +10,14 @@ namespace Core.Dto
         public MappingProfile()
         {
             //Domain to Domain
-            CreateMap<Domain.Event, Domain.Event>()
+            CreateMap<Event, Event>()
                 .ForAllMembers(opts => opts.Condition((src, dest, srcMember) => srcMember != null));
 
             CreateMap<AppUser, AppUser>()
                 .ForAllMembers(opts => opts.Condition((src, dest, srcMember) => srcMember != null));
 
             // Domain to API DTO
-            CreateMap<Domain.Event, EventDto>()
+            CreateMap<Event, EventDto>()
                 .ForMember(dto => dto.Attendees, opt => opt.MapFrom(a => a.UserEvents));
 
             CreateMap<AppUser, AppUserDto>()
@@ -25,24 +25,24 @@ namespace Core.Dto
                     .FirstOrDefault(p => p.IsAvatar).Url));
 
             CreateMap<UserEvent, AttendeeDto>()
-                .ForMember(a => a.IsHost, opt => opt.MapFrom(ua => ua.IsHost))
-                .ForMember(a => a.UserName, opt => opt.MapFrom(ua => ua.AppUser.UserName))
-                .ForMember(a => a.DisplayName, opt => opt.MapFrom(ua => ua.AppUser.DisplayName))
-                .ForMember(a => a.Image,
-                    opt => opt.MapFrom(au => au.AppUser.Photos.FirstOrDefault(u => u.IsAvatar).Url));
+                .ForMember(dto => dto.IsHost, opt => opt.MapFrom(ua => ua.IsHost))
+                .ForMember(dto => dto.UserName, opt => opt.MapFrom(ua => ua.AppUser.UserName))
+                .ForMember(dto => dto.DisplayName, opt => opt.MapFrom(ua => ua.AppUser.DisplayName))
+                .ForMember(dto => dto.Image,
+                    opt => opt.MapFrom(au => au.AppUser.Photos.FirstOrDefault(u => u.IsAvatar).Url))
+                .ForMember(dto => dto.Following, opt => opt.MapFrom<FollowingResolver>());
 
             CreateMap<Comment, CommentDto>()
-                .ForMember(dto => dto.UserName, o => o.MapFrom(u => u.Author.UserName))
-                .ForMember(dto => dto.DisplayName, o => o.MapFrom(u => u.Author.DisplayName))
-                .ForMember(d => d.Image, o => o.MapFrom(s => s.Author.Photos.FirstOrDefault(x => x.IsAvatar).Url));
+                .ForMember(dto => dto.UserName, opt => opt.MapFrom(u => u.Author.UserName))
+                .ForMember(dto => dto.DisplayName, opt => opt.MapFrom(u => u.Author.DisplayName))
+                .ForMember(d => d.Image, opt => opt.MapFrom(s => s.Author.Photos.FirstOrDefault(x => x.IsAvatar).Url));
 
 
             // API DTO to Domain
-            CreateMap<EventDto, Domain.Event>();
+            CreateMap<EventDto, Event>();
             CreateMap<AppUserDto, AppUser>();
             CreateMap<AttendeeDto, UserEvent>();
             CreateMap<CommentDto, Comment>();
-
         }
     }
 }

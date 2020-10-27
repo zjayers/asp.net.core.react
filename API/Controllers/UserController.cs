@@ -1,6 +1,6 @@
 using System.Threading.Tasks;
 using Core.Auth;
-using Core.DTO;
+using Core.Dto;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 

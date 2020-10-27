@@ -3,7 +3,7 @@ using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
 using AutoMapper;
-using Core.DTO;
+using Core.Dto;
 using Core.Errors;
 using FluentValidation;
 using MediatR;

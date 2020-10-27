@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
-using Core.DTO;
+using Core.Dto;
 using Core.Events;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;

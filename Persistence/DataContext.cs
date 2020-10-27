@@ -15,12 +15,14 @@ namespace Persistence
 
         public DbSet<Photo> Photos { get; set; }
         public DbSet<Comment> Comments { get; set; }
+        public DbSet<UserFollowing> Followings { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.ApplyConfiguration(new EventConfiguration());
             modelBuilder.ApplyConfiguration(new AppUserConfiguration());
             modelBuilder.ApplyConfiguration(new UserEventConfiguration());
+            modelBuilder.ApplyConfiguration(new UserFollowingConfiguration());
 
             base.OnModelCreating(modelBuilder);
         }

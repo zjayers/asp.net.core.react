@@ -28,9 +28,9 @@ const ActivityDetailsSideBar: React.FC<IProps> = ({
       </Segment>
       <Segment attached>
         <List relaxed divided>
-          {attendees.map((a) => (
-            <Item style={{ position: "relative" }} key={a.userName}>
-              {a.isHost && (
+          {attendees.map((attendee) => (
+            <Item style={{ position: "relative" }} key={attendee.userName}>
+              {attendee.isHost && (
                 <Label
                   style={{ position: "absolute" }}
                   color="orange"
@@ -39,12 +39,16 @@ const ActivityDetailsSideBar: React.FC<IProps> = ({
                   Host
                 </Label>
               )}
-              <Image size="tiny" src={a.image || "/assets/user.png"} />
+              <Image size="tiny" src={attendee.image || "/assets/user.png"} />
               <Item.Content verticalAlign="middle">
                 <Item.Header as="h3">
-                  <Link to={`/profile/${a.userName}`}>{a.displayName}</Link>
+                  <Link to={`/profile/${attendee.userName}`}>
+                    {attendee.displayName}
+                  </Link>
                 </Item.Header>
-                <Item.Extra style={{ color: "orange" }}>Following</Item.Extra>
+                {attendee.following && (
+                  <Item.Extra style={{ color: "orange" }}>Following</Item.Extra>
+                )}
               </Item.Content>
             </Item>
           ))}

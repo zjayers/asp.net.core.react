@@ -1,8 +1,7 @@
 using System;
 using System.Collections.Generic;
-using Core.Dto;
 
-namespace Core.DTO
+namespace Core.Dto
 {
     public class EventDto
     {

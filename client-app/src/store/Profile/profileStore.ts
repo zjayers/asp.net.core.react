@@ -1,4 +1,4 @@
-import { makeAutoObservable, runInAction } from "mobx";
+import { makeAutoObservable, reaction, runInAction } from "mobx";
 import { profilesApi } from "../../api";
 import { IPhoto, IProfile } from "../../models";
 import { catchAsync } from "../../util/catch-async";
@@ -7,13 +7,32 @@ import { RootStore } from "../index";
 export default class ProfileStore {
   rootStore: RootStore;
   profile: IProfile | null = null;
+  followings: IProfile[] = [];
+  activeTab: number | string | undefined = 0;
   loadingProfile = true;
   loadingAvatar = false;
+  loadingFollows = false;
   uploadingFile = false;
 
   constructor(rootStore: RootStore) {
     this.rootStore = rootStore;
     makeAutoObservable(this);
+
+    reaction(
+      () => this.activeTab,
+      async (activeTab) => {
+        console.log(activeTab);
+        this.followings = [];
+        switch (activeTab) {
+          case 2:
+            await this.getFollowings("followers");
+            break;
+          case 3:
+            await this.getFollowings("following");
+            break;
+        }
+      }
+    );
   }
 
   get isCurrentUser() {
@@ -23,6 +42,10 @@ export default class ProfileStore {
 
     return false;
   }
+
+  setActiveTab = (activeIndex: number | string | undefined) => {
+    this.activeTab = activeIndex;
+  };
 
   loadProfile = catchAsync(
     async (username: string) => {
@@ -96,5 +119,46 @@ export default class ProfileStore {
       });
     },
     () => (this.loadingAvatar = false)
+  );
+
+  follow = catchAsync(
+    async (username: string) => {
+      this.loadingFollows = true;
+      await profilesApi.follow(username);
+      runInAction(() => {
+        this.profile!.following = true;
+        this.profile!.followersCount++;
+        this.loadingFollows = false;
+      });
+    },
+    () => (this.loadingFollows = false)
+  );
+
+  unFollow = catchAsync(
+    async (username: string) => {
+      this.loadingFollows = true;
+      await profilesApi.unfollow(username);
+      runInAction(() => {
+        this.profile!.following = false;
+        this.profile!.followersCount--;
+        this.loadingFollows = false;
+      });
+    },
+    () => (this.loadingFollows = false)
+  );
+
+  getFollowings = catchAsync(
+    async (predicate: string) => {
+      this.loadingFollows = true;
+      const profiles = await profilesApi.getFollowings(
+        this.profile!.userName,
+        predicate
+      );
+      runInAction(() => {
+        this.followings = profiles;
+        this.loadingFollows = false;
+      });
+    },
+    () => (this.loadingFollows = false)
   );
 }

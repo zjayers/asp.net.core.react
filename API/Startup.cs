@@ -5,6 +5,7 @@ using API.SignalR;
 using AutoMapper;
 using Core;
 using Core.Interfaces;
+using Core.UserProfiles;
 using Domain;
 using FluentValidation.AspNetCore;
 using Infrastructure.PhotoUpload;
@@ -118,12 +119,14 @@ namespace API
             // Setup JWT Generator
             services.AddScoped<IJwtGenerator, JwtGenerator>();
 
-            // Setup HTTP Context username extractor
+            // Setup HTTP Context username extractor and profile reader
             services.AddScoped<IUserAccessor, UserAccessor>();
+            services.AddScoped<IProfileReader, ProfileReader>();
 
             // Setup Cloudinary Photo Upload
             services.Configure<CloudinarySettings>(Configuration.GetSection("Cloudinary"));
             services.AddScoped<IPhotoAccessor, PhotoAccessor>();
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

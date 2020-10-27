@@ -1,4 +1,4 @@
-namespace Core.DTO
+namespace Core.Dto
 {
     public class AppUserDto
     {

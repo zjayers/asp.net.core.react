@@ -7,7 +7,7 @@ using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Persistence;
 
-namespace Core.UserProfile
+namespace Core.UserProfiles
 {
     public class EditProfile
     {
