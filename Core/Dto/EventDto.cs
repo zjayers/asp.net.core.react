@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using Core.Dto;
 
 namespace Core.DTO
 {
@@ -14,5 +15,6 @@ namespace Core.DTO
         public string Venue { get; set; }
 
         public ICollection<AttendeeDto> Attendees { get; set; }
+        public ICollection<CommentDto> Comments { get; set; }
     }
 }

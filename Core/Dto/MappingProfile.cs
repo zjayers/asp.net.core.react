@@ -31,11 +31,18 @@ namespace Core.Dto
                 .ForMember(a => a.Image,
                     opt => opt.MapFrom(au => au.AppUser.Photos.FirstOrDefault(u => u.IsAvatar).Url));
 
+            CreateMap<Comment, CommentDto>()
+                .ForMember(dto => dto.UserName, o => o.MapFrom(u => u.Author.UserName))
+                .ForMember(dto => dto.DisplayName, o => o.MapFrom(u => u.Author.DisplayName))
+                .ForMember(d => d.Image, o => o.MapFrom(s => s.Author.Photos.FirstOrDefault(x => x.IsAvatar).Url));
+
 
             // API DTO to Domain
             CreateMap<EventDto, Domain.Event>();
             CreateMap<AppUserDto, AppUser>();
             CreateMap<AttendeeDto, UserEvent>();
+            CreateMap<CommentDto, Comment>();
+
         }
     }
 }

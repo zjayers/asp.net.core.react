@@ -4,13 +4,13 @@ import { observer } from "mobx-react";
 import React from "react";
 import { Link } from "react-router-dom";
 import { Button, Icon, Item, Label, Segment } from "semantic-ui-react";
-import { IActivity } from "../../../../models";
-import { useActivityStore } from "../../../hooks/useActivityStore";
+import { IEvent } from "../../../../models";
+import { useActivityStore } from "../../../../hooks/useActivityStore";
 import AttendeesList from "../AttendeesList/AttendeesList";
 
 // * Interfaces
 interface IProps {
-  activity: IActivity;
+  activity: IEvent;
 }
 
 // * Component
@@ -39,6 +39,7 @@ const ActivityItem: React.FC<IProps> = ({
               size={"tiny"}
               circular
               src={host?.image || "/assets/user.png"}
+              style={{ marginBottom: "3px" }}
             />
             <Item.Content>
               <Item.Header as={Link} to={`/events/${id}`}>
@@ -46,9 +47,9 @@ const ActivityItem: React.FC<IProps> = ({
               </Item.Header>
               <Item.Description>
                 Hosted by{" "}
-                <Item.Description as={Link} to={`/profile/${host?.userName}`}>
+                <Link to={`/profile/${host?.userName}`}>
                   {host?.displayName || ""}
-                </Item.Description>
+                </Link>
               </Item.Description>
 
               {isHost && (

@@ -3,11 +3,11 @@ import { observer } from "mobx-react";
 import React, { Fragment } from "react";
 import { Link } from "react-router-dom";
 import { Image, Item, Label, List, Segment } from "semantic-ui-react";
-import { IActivity } from "../../../../models";
+import { IEvent } from "../../../../models";
 
 // * Interfaces
 interface IProps {
-  activity: IActivity;
+  activity: IEvent;
 }
 
 // * Component

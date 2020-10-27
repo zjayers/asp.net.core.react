@@ -4,9 +4,9 @@ import { observer } from "mobx-react";
 import React from "react";
 import { Link } from "react-router-dom";
 import { Button, Header, Image, Item, Segment } from "semantic-ui-react";
-import { IActivity } from "../../../../models";
-import { useActivityStore } from "../../../hooks/useActivityStore";
-import { useGuiStore } from "../../../hooks/useGuiStore";
+import { IEvent } from "../../../../models";
+import { useActivityStore } from "../../../../hooks/useActivityStore";
+import { useGuiStore } from "../../../../hooks/useGuiStore";
 
 // * Styles
 const activityImageStyle = {
@@ -23,7 +23,7 @@ const activityImageTextStyle = {
 };
 
 interface IProps {
-  activity: IActivity;
+  activity: IEvent;
 }
 
 // * Component
@@ -56,7 +56,12 @@ const ActivityDetailsHeader: React.FC<IProps> = ({
                 />
                 <p>{format(date, "eeee, MMMM do")}</p>
                 <p>
-                  Hosted by <strong>{host?.displayName || ""}</strong>
+                  Hosted by{" "}
+                  <Link to={`/profile/${host?.userName}`}>
+                    <strong style={{ color: "white" }}>
+                      {host?.displayName || ""}
+                    </strong>
+                  </Link>
                 </p>
               </Item.Content>
             </Item>

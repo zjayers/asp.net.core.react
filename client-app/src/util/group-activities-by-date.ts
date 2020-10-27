@@ -1,9 +1,9 @@
-import { IActivity } from "../models";
+import { IEvent } from "../models";
 
 /**
  * Utility method to sort and group activities by date
  */
-export const groupActivitiesByDate = (activities: IActivity[]) => {
+export const groupActivitiesByDate = (activities: IEvent[]) => {
   const sortedActivities = activities.sort(
     (a, b) => a.date.getTime() - b.date.getTime()
   );
@@ -15,6 +15,6 @@ export const groupActivitiesByDate = (activities: IActivity[]) => {
         ? [...activities[date], activity]
         : [activity];
       return activities;
-    }, {} as { [key: string]: IActivity[] })
+    }, {} as { [key: string]: IEvent[] })
   );
 };

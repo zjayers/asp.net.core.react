@@ -1,9 +1,6 @@
-import { IActivity, IUser } from "../models";
+import { IEvent, IUser } from "../models";
 
-export const checkActivityAttendeeProps = (
-  activity: IActivity,
-  user: IUser
-) => {
+export const checkActivityAttendeeProps = (activity: IEvent, user: IUser) => {
   activity.isGoing = activity.attendees.some(
     (at) => at.userName === user?.userName
   );

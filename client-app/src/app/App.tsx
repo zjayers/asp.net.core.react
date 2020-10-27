@@ -3,6 +3,8 @@ import React, { Fragment, useEffect } from "react";
 import { Route, Switch, useLocation } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
 import { Container } from "semantic-ui-react";
+import { useGuiStore } from "../hooks/useGuiStore";
+import { useUserStore } from "../hooks/useUserStore";
 import {
   ActivityDashboard,
   ActivityDetails,
@@ -10,11 +12,9 @@ import {
 } from "./components/activities";
 import { LoadingSpinner, NavBar } from "./components/shared";
 import ModalContainer from "./components/shared/modals/ModalContainer";
-import LoginForm from "./components/user/LoginForm/LoginForm";
-import { useGuiStore } from "./hooks/useGuiStore";
-import { useUserStore } from "./hooks/useUserStore";
 import HomePage from "./pages/HomePage/HomePage";
 import NotFound from "./pages/NotFound/NotFound";
+import ProfilePage from "./pages/ProfilePage/ProfilePage";
 
 const App = () => {
   const location = useLocation();
@@ -47,7 +47,7 @@ const App = () => {
                   path={["/createEvent", "/manage/:id"]}
                   component={ActivityForm}
                 />
-                <Route path={"/login"} component={LoginForm} />
+                <Route path={"/profile/:username"} component={ProfilePage} />
                 <Route component={NotFound} />
               </Switch>
             </Container>

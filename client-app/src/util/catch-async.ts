@@ -1,3 +1,4 @@
+import { runInAction } from "mobx";
 import { toast } from "react-toastify";
 // Catch all function for wrapping async api calls
 export const catchAsync = (fn: Function, cleanup?: Function) => {
@@ -5,9 +6,11 @@ export const catchAsync = (fn: Function, cleanup?: Function) => {
     try {
       return await fn(...args);
     } catch (e) {
-      toast.error(e.message);
-      cleanup && cleanup();
-      throw e;
+      runInAction(() => {
+        toast.error(e.message);
+        cleanup && cleanup();
+        throw e;
+      });
     }
   };
 };

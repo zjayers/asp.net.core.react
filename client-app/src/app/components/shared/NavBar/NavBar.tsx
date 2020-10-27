@@ -1,8 +1,9 @@
+import { observer } from "mobx-react";
 import React from "react";
 import { Link, NavLink } from "react-router-dom";
 import { Button, Container, Dropdown, Menu, Image } from "semantic-ui-react";
-import { useActivityStore } from "../../../hooks/useActivityStore";
-import { useUserStore } from "../../../hooks/useUserStore";
+import { useActivityStore } from "../../../../hooks/useActivityStore";
+import { useUserStore } from "../../../../hooks/useUserStore";
 
 const NavBar = () => {
   const { clearSelectedActivity } = useActivityStore();
@@ -36,7 +37,7 @@ const NavBar = () => {
               <Dropdown.Menu>
                 <Dropdown.Item
                   as={Link}
-                  to={`/profile/username`}
+                  to={`/profile/${user.userName}`}
                   text="My profile"
                   icon="user"
                 />
@@ -50,4 +51,4 @@ const NavBar = () => {
   );
 };
 
-export default NavBar;
+export default observer(NavBar);

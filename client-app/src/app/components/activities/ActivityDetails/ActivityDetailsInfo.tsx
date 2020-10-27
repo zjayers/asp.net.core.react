@@ -2,10 +2,10 @@
 import { format } from "date-fns";
 import React from "react";
 import { Grid, Icon, Segment } from "semantic-ui-react";
-import { IActivity } from "../../../../models";
+import { IEvent } from "../../../../models";
 
 interface IProps {
-  activity: IActivity;
+  activity: IEvent;
 }
 
 // * Component

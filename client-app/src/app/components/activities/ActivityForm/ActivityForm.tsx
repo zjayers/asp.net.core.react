@@ -11,11 +11,11 @@ import {
 } from "revalidate";
 import { Button, Form, Grid, Segment } from "semantic-ui-react";
 import { v4 as uuid } from "uuid";
-import { IActivity } from "../../../../models";
+import { IEvent } from "../../../../models";
 import { combinedDateAndTime } from "../../../../util/combine-date-and-time";
 import { categoryOptions } from "../../../../store/data/category-options";
-import { useActivityStore } from "../../../hooks/useActivityStore";
-import { useGuiStore } from "../../../hooks/useGuiStore";
+import { useActivityStore } from "../../../../hooks/useActivityStore";
+import { useGuiStore } from "../../../../hooks/useGuiStore";
 
 import {
   DateInput,
@@ -40,7 +40,7 @@ const validate = combineValidators({
 // * Component
 const ActivityForm = () => {
   const {
-    selectedActivity,
+    selectedEvent,
     createOneActivity,
     editOneActivity,
     getOneActivity,
@@ -52,7 +52,7 @@ const ActivityForm = () => {
   const history = useHistory();
   const { id } = useParams();
 
-  const [activity, setActivity] = useState<IActivity>(selectedActivity);
+  const [activity, setActivity] = useState<IEvent>(selectedEvent);
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
@@ -160,8 +160,8 @@ const ActivityForm = () => {
                     disabled={loading}
                     onClick={() =>
                       id
-                        ? history.push(`/activities/${id}`)
-                        : history.push(`/activities`)
+                        ? history.push(`/events/${id}`)
+                        : history.push(`/events`)
                     }
                   />
                 </Button.Group>

@@ -4,8 +4,8 @@ import { Field, Form as FinalForm } from "react-final-form";
 import { combineValidators, isRequired } from "revalidate";
 import { Button, Form, Header } from "semantic-ui-react";
 import { IUserFormValues } from "../../../../models";
-import { useAuthRedirect } from "../../../hooks/useAuthRedirect";
-import { useUserStore } from "../../../hooks/useUserStore";
+import { useAuthRedirect } from "../../../../hooks/useAuthRedirect";
+import { useUserStore } from "../../../../hooks/useUserStore";
 import { TextInput } from "../../shared";
 import ErrorLabel from "../../shared/form/ErrorLabel/ErrorLabel";
 

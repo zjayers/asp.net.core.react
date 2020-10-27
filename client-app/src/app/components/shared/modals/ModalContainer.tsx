@@ -1,7 +1,7 @@
 import { observer } from "mobx-react";
 import React from "react";
 import { Modal } from "semantic-ui-react";
-import { useModalStore } from "../../../hooks/useModalStore";
+import { useModalStore } from "../../../../hooks/useModalStore";
 
 const ModalContainer = () => {
   const {

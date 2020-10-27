@@ -1,6 +1,7 @@
 using System.Threading.Tasks;
 using AutoMapper;
 using Core.UserProfile;
+using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
 namespace API.Controllers
@@ -12,5 +13,12 @@ namespace API.Controllers
         {
             return await Mediator.Send(new GetUserProfile.Query() {UserName = username});
         }
+
+        [HttpPut]
+        public async Task<ActionResult<Unit>> EditProfile(EditProfile.Command command)
+        {
+            return await Mediator.Send(command);
+        }
+
     }
 }

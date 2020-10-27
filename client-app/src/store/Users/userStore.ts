@@ -1,5 +1,5 @@
 import { autorun, makeAutoObservable, reaction, runInAction } from "mobx";
-import agent from "../../api/agent";
+import { usersApi } from "../../api";
 import { IUser, IUserFormValues } from "../../models";
 import { catchAsync } from "../../util/catch-async";
 import { history } from "../../app/features/browser-history";
@@ -12,7 +12,7 @@ export default class UserStore {
   user: IUser | null = null;
   token: string | null = null;
   getUser = catchAsync(async () => {
-    const user = await agent.usersApi.getCurrentUser();
+    const user = await usersApi.getCurrentUser();
     runInAction(() => (this.user = user));
   });
 
@@ -59,18 +59,18 @@ export default class UserStore {
       if (user?.token) {
         this.setToken(user.token);
         this.rootStore.modalStore.closeModal();
-        history.push("/activities");
+        history.push("/events");
       }
     });
   };
 
   // * Actions
   login = catchAsync(async (values: IUserFormValues) => {
-    const user = await agent.usersApi.login(values);
+    const user = await usersApi.login(values);
     this.setUserTokenAndContinue(user);
   });
   register = catchAsync(async (values: IUserFormValues) => {
-    const user = await agent.usersApi.register(values);
+    const user = await usersApi.register(values);
     this.setUserTokenAndContinue(user);
   });
 }

@@ -1,23 +1,29 @@
 import { createContext } from "react";
-import ActivityStore from "./Activities/activityStore";
-import GuiStore from "./Gui/GuiStore";
+import EventStore from "./events/eventStore";
+import CommentStore from "./comments/commentStore";
+import GuiStore from "./gui/GuiStore";
 import ModalStore from "./Modal/modalStore";
+import ProfileStore from "./Profile/profileStore";
 import UserStore from "./Users/userStore";
 import { configure } from "mobx";
 
 configure({ enforceActions: "always" });
 
 export class RootStore {
-  activityStore: ActivityStore;
+  eventStore: EventStore;
   userStore: UserStore;
   guiStore: GuiStore;
   modalStore: ModalStore;
+  profileStore: ProfileStore;
+  commentStore: CommentStore;
 
   constructor() {
-    this.activityStore = new ActivityStore(this);
+    this.eventStore = new EventStore(this);
     this.userStore = new UserStore(this);
     this.guiStore = new GuiStore(this);
     this.modalStore = new ModalStore(this);
+    this.profileStore = new ProfileStore(this);
+    this.commentStore = new CommentStore(this);
   }
 }
 

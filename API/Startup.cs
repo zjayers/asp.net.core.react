@@ -1,5 +1,7 @@
 using System.Text;
+using System.Threading.Tasks;
 using API.Middleware;
+using API.SignalR;
 using AutoMapper;
 using Core;
 using Core.Interfaces;
@@ -42,6 +44,9 @@ namespace API
                 opt.UseSqlite(Configuration.GetConnectionString("DefaultConnection"));
             });
 
+            // Add SignalR
+            services.AddSignalR();
+
             // Add MediatR
             services.AddMediatR(typeof(InitCore).Assembly);
 
@@ -52,7 +57,7 @@ namespace API
             services.AddCors(o =>
             {
                 o.AddPolicy("CorsPolicy",
-                    policy => { policy.AllowAnyHeader().AllowAnyMethod().WithOrigins("http://localhost:3000"); });
+                    policy => { policy.AllowAnyHeader().AllowAnyMethod().WithOrigins("http://localhost:3000").AllowCredentials(); });
             });
 
             // Add API Controllers
@@ -91,6 +96,23 @@ namespace API
                     ValidateAudience = false,
                     ValidateIssuer = false
                 };
+
+                // Set up JWT Bearer to allow access to token from SignalR
+                opt.Events = new JwtBearerEvents()
+                {
+                    OnMessageReceived = context =>
+                    {
+                        var accessToken = context.Request.Query["access_token"];
+                        var path = context.HttpContext.Request.Path;
+
+                        if (!string.IsNullOrEmpty(accessToken) && path.StartsWithSegments("/chat"))
+                        {
+                            context.Token = accessToken;
+                        }
+
+                        return Task.CompletedTask;
+                    }
+                };
             });
 
             // Setup JWT Generator
@@ -124,7 +146,10 @@ namespace API
             app.UseAuthorization();
 
             // Middleware: Map controller endpoints into the API
-            app.UseEndpoints(endpoints => { endpoints.MapControllers(); });
+            app.UseEndpoints(endpoints => {
+                endpoints.MapControllers();
+                endpoints.MapHub<ChatHub>("/chat");
+            });
         }
     }
 }

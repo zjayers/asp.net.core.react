@@ -46,7 +46,7 @@ namespace Core.Events
                         new {Activity = "Could not find user"});
 
                 var attendance = await _context.UserEvents
-                    .SingleOrDefaultAsync(ua => ua.ActivityId == activity.Id && ua.AppUserId == user.Id);
+                    .SingleOrDefaultAsync(ua => ua.EventId == activity.Id && ua.AppUserId == user.Id);
 
                 if (attendance == null)
                     return Unit.Value;

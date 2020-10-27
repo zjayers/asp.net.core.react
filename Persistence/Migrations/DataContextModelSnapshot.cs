@@ -139,6 +139,33 @@ namespace Persistence.Migrations
                         });
                 });
 
+            modelBuilder.Entity("Domain.Comment", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("AuthorId")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Body")
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("TEXT");
+
+                    b.Property<Guid?>("EventId")
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("AuthorId");
+
+                    b.HasIndex("EventId");
+
+                    b.ToTable("Comments");
+                });
+
             modelBuilder.Entity("Domain.Event", b =>
                 {
                     b.Property<Guid>("Id")
@@ -236,7 +263,7 @@ namespace Persistence.Migrations
                     b.Property<string>("AppUserId")
                         .HasColumnType("TEXT");
 
-                    b.Property<Guid>("ActivityId")
+                    b.Property<Guid>("EventId")
                         .HasColumnType("TEXT");
 
                     b.Property<DateTime>("DateJoined")
@@ -245,9 +272,9 @@ namespace Persistence.Migrations
                     b.Property<bool>("IsHost")
                         .HasColumnType("INTEGER");
 
-                    b.HasKey("AppUserId", "ActivityId");
+                    b.HasKey("AppUserId", "EventId");
 
-                    b.HasIndex("ActivityId");
+                    b.HasIndex("EventId");
 
                     b.ToTable("UserEvents");
 
@@ -255,42 +282,42 @@ namespace Persistence.Migrations
                         new
                         {
                             AppUserId = "D8C62AEE-ADE7-4A9F-8A26-50C20ED5F1ED",
-                            ActivityId = new Guid("c5d60467-2992-4878-a575-076c8b6ce32b"),
+                            EventId = new Guid("c5d60467-2992-4878-a575-076c8b6ce32b"),
                             DateJoined = new DateTime(2020, 2, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             IsHost = true
                         },
                         new
                         {
                             AppUserId = "F169161F-C669-4CF9-8A33-662FFFBCEB7B",
-                            ActivityId = new Guid("c5d60467-2992-4878-a575-076c8b6ce32b"),
+                            EventId = new Guid("c5d60467-2992-4878-a575-076c8b6ce32b"),
                             DateJoined = new DateTime(2020, 2, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             IsHost = false
                         },
                         new
                         {
                             AppUserId = "7B01DF1A-2D77-4872-B383-7C5683035FBD",
-                            ActivityId = new Guid("94502f82-d435-40ea-992e-5746385c545c"),
+                            EventId = new Guid("94502f82-d435-40ea-992e-5746385c545c"),
                             DateJoined = new DateTime(2020, 3, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             IsHost = true
                         },
                         new
                         {
                             AppUserId = "F169161F-C669-4CF9-8A33-662FFFBCEB7B",
-                            ActivityId = new Guid("4c81c658-272d-41ac-b406-48b85e05fcc1"),
+                            EventId = new Guid("4c81c658-272d-41ac-b406-48b85e05fcc1"),
                             DateJoined = new DateTime(2020, 10, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             IsHost = true
                         },
                         new
                         {
                             AppUserId = "F169161F-C669-4CF9-8A33-662FFFBCEB7B",
-                            ActivityId = new Guid("fc2f7480-4b54-4564-b737-34ccb832f306"),
+                            EventId = new Guid("fc2f7480-4b54-4564-b737-34ccb832f306"),
                             DateJoined = new DateTime(2020, 10, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             IsHost = true
                         },
                         new
                         {
                             AppUserId = "7B01DF1A-2D77-4872-B383-7C5683035FBD",
-                            ActivityId = new Guid("fc2f7480-4b54-4564-b737-34ccb832f306"),
+                            EventId = new Guid("fc2f7480-4b54-4564-b737-34ccb832f306"),
                             DateJoined = new DateTime(2020, 10, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             IsHost = false
                         });
@@ -424,6 +451,17 @@ namespace Persistence.Migrations
                     b.ToTable("AspNetUserTokens");
                 });
 
+            modelBuilder.Entity("Domain.Comment", b =>
+                {
+                    b.HasOne("Domain.AppUser", "Author")
+                        .WithMany()
+                        .HasForeignKey("AuthorId");
+
+                    b.HasOne("Domain.Event", "Event")
+                        .WithMany("Comments")
+                        .HasForeignKey("EventId");
+                });
+
             modelBuilder.Entity("Domain.Photo", b =>
                 {
                     b.HasOne("Domain.AppUser", null)
@@ -433,15 +471,15 @@ namespace Persistence.Migrations
 
             modelBuilder.Entity("Domain.UserEvent", b =>
                 {
-                    b.HasOne("Domain.Event", "Event")
+                    b.HasOne("Domain.AppUser", "AppUser")
                         .WithMany("UserEvents")
-                        .HasForeignKey("ActivityId")
+                        .HasForeignKey("AppUserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Domain.AppUser", "AppUser")
-                        .WithMany("UserActivities")
-                        .HasForeignKey("AppUserId")
+                    b.HasOne("Domain.Event", "Event")
+                        .WithMany("UserEvents")
+                        .HasForeignKey("EventId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });

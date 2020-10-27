@@ -5,8 +5,8 @@ import { Button, Container, Header, Image, Segment } from "semantic-ui-react";
 import LoginForm from "../../components/user/LoginForm/LoginForm";
 import RegisterForm from "../../components/user/RegisterForm/RegisterForm";
 
-import { useAuthRedirect } from "../../hooks/useAuthRedirect";
-import { useModalStore } from "../../hooks/useModalStore";
+import { useAuthRedirect } from "../../../hooks/useAuthRedirect";
+import { useModalStore } from "../../../hooks/useModalStore";
 
 // * Component
 const HomePage = () => {

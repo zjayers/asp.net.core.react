@@ -2,7 +2,7 @@
 import { observer } from "mobx-react";
 import React, { Fragment } from "react";
 import { Item, Label } from "semantic-ui-react";
-import { useActivityStore } from "../../../hooks/useActivityStore";
+import { useActivityStore } from "../../../../hooks/useActivityStore";
 import ActivityItem from "../ActivityItem/ActivityItem";
 import { format } from "date-fns";
 

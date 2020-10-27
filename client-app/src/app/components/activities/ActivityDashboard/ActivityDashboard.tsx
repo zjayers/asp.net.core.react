@@ -1,8 +1,8 @@
 import { observer } from "mobx-react";
 import React, { useEffect } from "react";
 import { Grid } from "semantic-ui-react";
-import { useActivityStore } from "../../../hooks/useActivityStore";
-import { useGuiStore } from "../../../hooks/useGuiStore";
+import { useActivityStore } from "../../../../hooks/useActivityStore";
+import { useGuiStore } from "../../../../hooks/useGuiStore";
 import { LoadingSpinner } from "../../shared";
 import ActivityList from "../ActivityList/ActivityList";
 
