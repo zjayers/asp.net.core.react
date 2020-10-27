@@ -38,8 +38,12 @@ const ActivityItem: React.FC<IProps> = ({
             <Item.Image
               size={"tiny"}
               circular
+              bordered
+              style={{
+                marginBottom: "3px",
+                boxShadow: "0px 0px 2px rgba(0,0,0,.5)",
+              }}
               src={host?.image || "/assets/user.png"}
-              style={{ marginBottom: "3px" }}
             />
             <Item.Content>
               <Item.Header as={Link} to={`/events/${id}`}>
@@ -84,7 +88,7 @@ const ActivityItem: React.FC<IProps> = ({
       </Segment>
       <Segment clearing>
         <div style={{ display: "flex" }}>
-          <span style={{ paddingRight: 20 }}>{description}</span>
+          <span style={{ paddingRight: 20, flex: 1 }}>{description}</span>
           <Button
             as={Link}
             to={`/events/${id}`}

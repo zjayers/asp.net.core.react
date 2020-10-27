@@ -1,3 +1,4 @@
+using System;
 using System.Text;
 using System.Threading.Tasks;
 using API.Middleware;
@@ -58,7 +59,11 @@ namespace API
             services.AddCors(o =>
             {
                 o.AddPolicy("CorsPolicy",
-                    policy => { policy.AllowAnyHeader().AllowAnyMethod().WithOrigins("http://localhost:3000").AllowCredentials(); });
+                    policy =>
+                    {
+                        policy.AllowAnyHeader().AllowAnyMethod().WithExposedHeaders("WWW-Authenticate")
+                            .WithOrigins("http://localhost:3000").AllowCredentials();
+                    });
             });
 
             // Add API Controllers
@@ -95,7 +100,9 @@ namespace API
                     ValidateIssuerSigningKey = true,
                     IssuerSigningKey = key,
                     ValidateAudience = false,
-                    ValidateIssuer = false
+                    ValidateIssuer = false,
+                    ValidateLifetime = true,
+                    ClockSkew = TimeSpan.Zero
                 };
 
                 // Set up JWT Bearer to allow access to token from SignalR
@@ -126,7 +133,6 @@ namespace API
             // Setup Cloudinary Photo Upload
             services.Configure<CloudinarySettings>(Configuration.GetSection("Cloudinary"));
             services.AddScoped<IPhotoAccessor, PhotoAccessor>();
-
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -149,7 +155,8 @@ namespace API
             app.UseAuthorization();
 
             // Middleware: Map controller endpoints into the API
-            app.UseEndpoints(endpoints => {
+            app.UseEndpoints(endpoints =>
+            {
                 endpoints.MapControllers();
                 endpoints.MapHub<ChatHub>("/chat");
             });

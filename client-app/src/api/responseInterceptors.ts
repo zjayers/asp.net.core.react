@@ -1,4 +1,5 @@
 import { toast } from "react-toastify";
+import { history } from "../app/features/browser-history";
 import { navigateToNotFoundPage } from "../util/navigate-to-not-found-page";
 
 export const catchHttpErrorAndToast = (error: any) => {
@@ -10,7 +11,7 @@ export const catchHttpErrorAndToast = (error: any) => {
     throw error;
   }
 
-  const { status, data, config } = error.response;
+  const { status, data, config, headers } = error.response;
 
   switch (status) {
     // Bad Request
@@ -18,6 +19,28 @@ export const catchHttpErrorAndToast = (error: any) => {
       config.method === "get" &&
         data.errors.hasOwnProperty("id") &&
         navigateToNotFoundPage();
+      break;
+    // Unauthorized
+    case 401:
+      console.log(headers["www-authenticate"]);
+
+      if (
+        headers["www-authenticate"] &&
+        headers["www-authenticate"].includes("The token expired")
+      ) {
+        window.localStorage.removeItem("jwt");
+        history.push("/");
+        history.push("/");
+        history.push("/");
+        history.push("/");
+        history.push("/");
+        history.push("/");
+        history.push("/");
+        history.push("/");
+        history.push("/");
+        toast.info("Your session has expired. Please login again.");
+      }
+      console.log(error.response);
       break;
     // Not Found
     case 404:

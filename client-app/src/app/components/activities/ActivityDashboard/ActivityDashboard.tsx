@@ -4,8 +4,8 @@ import InfiniteScroll from "react-infinite-scroller";
 import { Grid, Loader } from "semantic-ui-react";
 import { useEventStore } from "../../../../hooks/useEventStore";
 import { useGuiStore } from "../../../../hooks/useGuiStore";
-import { LoadingSpinner } from "../../shared";
 import ActivityFilters from "../ActivityFilters/ActivityFilters";
+import ActivityItemPlaceholder from "../ActivityItemPlaceholder/ActivityItemPlaceholder";
 import ActivityList from "../ActivityList/ActivityList";
 
 // * Component
@@ -32,19 +32,21 @@ const ActivityDashboard = () => {
     getAllActivities();
   }, [getAllActivities]);
 
-  return loadingInitial && eventPage === 0 ? (
-    <LoadingSpinner content={"Loading activities..."} />
-  ) : (
+  return (
     <Grid>
       <Grid.Column width={10}>
-        <InfiniteScroll
-          pageStart={0}
-          loadMore={handleGetMoreEvents}
-          hasMore={!loadingMore && eventPage + 1 < totalNumberOfPages}
-          initialLoad={false}
-        >
-          <ActivityList />
-        </InfiniteScroll>
+        {loadingInitial && eventPage === 0 ? (
+          <ActivityItemPlaceholder />
+        ) : (
+          <InfiniteScroll
+            pageStart={0}
+            loadMore={handleGetMoreEvents}
+            hasMore={!loadingMore && eventPage + 1 < totalNumberOfPages}
+            initialLoad={false}
+          >
+            <ActivityList />
+          </InfiniteScroll>
+        )}
       </Grid.Column>
       <Grid.Column width={6}>
         <ActivityFilters />

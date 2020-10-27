@@ -10,6 +10,7 @@ import {
   ActivityDetails,
   ActivityForm,
 } from "./components/activities";
+import AuthRoute from "./components/AuthRoute";
 import { LoadingSpinner, NavBar } from "./components/shared";
 import ModalContainer from "./components/shared/modals/ModalContainer";
 import HomePage from "./pages/HomePage/HomePage";
@@ -40,14 +41,21 @@ const App = () => {
             <NavBar />
             <Container className={"app__list-container"}>
               <Switch>
-                <Route exact path={"/events"} component={ActivityDashboard} />
-                <Route path={"/events/:id"} component={ActivityDetails} />
-                <Route
+                <AuthRoute
+                  exact
+                  path={"/events"}
+                  component={ActivityDashboard}
+                />
+                <AuthRoute path={"/events/:id"} component={ActivityDetails} />
+                <AuthRoute
                   key={location.key}
                   path={["/createEvent", "/manage/:id"]}
                   component={ActivityForm}
                 />
-                <Route path={"/profile/:username"} component={ProfilePage} />
+                <AuthRoute
+                  path={"/profile/:username"}
+                  component={ProfilePage}
+                />
                 <Route component={NotFound} />
               </Switch>
             </Container>

@@ -43,6 +43,11 @@ export default class UserStore {
     return !!this.user;
   }
 
+  get isTokenValid() {
+    const token = window.localStorage.getItem("jwt");
+    return !!token;
+  }
+
   logout = () => {
     this.setToken(null);
     this.user = null;

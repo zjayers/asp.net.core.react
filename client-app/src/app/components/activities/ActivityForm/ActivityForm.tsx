@@ -88,7 +88,7 @@ const ActivityForm = () => {
 
   return (
     <Grid>
-      <Grid.Column width={10}>
+      <Grid.Column width={16}>
         <Segment clearing>
           <FinalForm
             initialValues={activity}
