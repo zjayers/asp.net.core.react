@@ -58,11 +58,7 @@ const ProfileEvents = () => {
           <br />
           <Card.Group itemsPerRow={4}>
             {userEvents.map((activity: IUserEvent) => (
-              <Card
-                as={Link}
-                to={`/activities/${activity.id}`}
-                key={activity.id}
-              >
+              <Card as={Link} to={`/events/${activity.id}`} key={activity.id}>
                 <Image
                   src={`/assets/categoryImages/${activity.category}.jpg`}
                   style={{ minHeight: 100, objectFit: "cover" }}

@@ -6,7 +6,7 @@ import {
 import { catchHttpErrorAndToast } from "./responseInterceptors";
 
 /* Defaults */
-axios.defaults.baseURL = "http://localhost:5000/api";
+axios.defaults.baseURL = process.env.REACT_APP_API_URL;
 
 /* Intercept request and send jwts with requests */
 axios.interceptors.request.use(
