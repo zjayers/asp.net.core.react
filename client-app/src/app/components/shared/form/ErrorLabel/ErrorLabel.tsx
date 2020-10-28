@@ -9,7 +9,12 @@ interface IProps {
 
 const ErrorLabel: React.FC<IProps> = ({ error, text }) => {
   const flattenValidationErrors = () => {
-    if (error && error.data && Object.keys(error.data.errors).length > 0)
+    if (
+      error &&
+      error.data &&
+      error.data.errors &&
+      Object.keys(error.data.errors).length > 0
+    )
       return (
         <Message.List>
           {Object.values(error.data.errors)

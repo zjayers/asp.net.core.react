@@ -17,7 +17,8 @@ namespace Persistence.EntityConfigurations
                     PasswordHash =
                         "AQAAAAEAACcQAAAAEAy90BXaaDIxJm+9G2FiuKBNmjnGr4/syBRu/GTPuAZ2DbIAWNb1kl2VzC4PfBDJkA==",
                     ConcurrencyStamp = "5c1cbe50-290a-464b-b32d-60981bea1877",
-                    SecurityStamp = "92657c22-f297-41da-984a-8deb392f5540"
+                    SecurityStamp = "92657c22-f297-41da-984a-8deb392f5540",
+                    EmailConfirmed = true
                 },
                 new AppUser
                 {
@@ -27,7 +28,8 @@ namespace Persistence.EntityConfigurations
                     PasswordHash =
                         "AQAAAAEAACcQAAAAEAy90BXaaDIxJm+9G2FiuKBNmjnGr4/syBRu/GTPuAZ2DbIAWNb1kl2VzC4PfBDJkA==",
                     ConcurrencyStamp = "c01f9e4a-5935-43aa-a137-1cf23c8c499e",
-                    SecurityStamp = "b88d0d77-d0c7-41b1-adf0-fa43d13028db"
+                    SecurityStamp = "b88d0d77-d0c7-41b1-adf0-fa43d13028db",
+                    EmailConfirmed = true
                 },
                 new AppUser
                 {
@@ -37,7 +39,8 @@ namespace Persistence.EntityConfigurations
                     PasswordHash =
                         "AQAAAAEAACcQAAAAEAy90BXaaDIxJm+9G2FiuKBNmjnGr4/syBRu/GTPuAZ2DbIAWNb1kl2VzC4PfBDJkA==",
                     ConcurrencyStamp = "1abc3ae0-c563-4af0-aaee-bb7d6c1a0258",
-                    SecurityStamp = "87f7b445-3fa1-497f-924c-39b0f2370947"
+                    SecurityStamp = "87f7b445-3fa1-497f-924c-39b0f2370947",
+                    EmailConfirmed = true
                 });
         }
     }

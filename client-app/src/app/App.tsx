@@ -13,6 +13,8 @@ import {
 import AuthRoute from "./components/AuthRoute";
 import { LoadingSpinner, NavBar } from "./components/shared";
 import ModalContainer from "./components/shared/modals/ModalContainer";
+import RegisterSuccess from "./components/user/RegisterSuccess/RegisterSuccess";
+import VerifyEmail from "./components/user/VerifyEmail/VerifyEmail";
 import HomePage from "./pages/HomePage/HomePage";
 import NotFound from "./pages/NotFound/NotFound";
 import ProfilePage from "./pages/ProfilePage/ProfilePage";
@@ -58,6 +60,11 @@ const App = () => {
                   path={"/profile/:username"}
                   component={ProfilePage}
                 />
+                <Route
+                  path={"/user/registerSuccess"}
+                  component={RegisterSuccess}
+                />
+                <Route path={"/user/verifyEmail"} component={VerifyEmail} />
                 <Route component={NotFound} />
               </Switch>
             </Container>

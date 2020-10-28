@@ -23,6 +23,11 @@ export default class UserStore {
       this.startRefreshTokenTimer(user);
     });
   });
+  register = catchAsync(async (values: IUserFormValues) => {
+    await usersApi.register(values);
+    this.rootStore.modalStore.closeModal();
+    history.push(`/user/registerSuccess?email=${values.email}`);
+  });
 
   constructor(rootStore: RootStore) {
     this.rootStore = rootStore;
@@ -103,14 +108,8 @@ export default class UserStore {
     },
     () => (this.loadingFacebook = false)
   );
-
   login = catchAsync(async (values: IUserFormValues) => {
     const user = await usersApi.login(values);
-    this.setUserTokenAndContinue(user);
-  });
-
-  register = catchAsync(async (values: IUserFormValues) => {
-    const user = await usersApi.register(values);
     this.setUserTokenAndContinue(user);
   });
 

@@ -1,9 +1,9 @@
 using System;
 using System.Net;
+using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using AutoMapper;
-using Core.Dto;
 using Core.Errors;
 using Core.Interfaces;
 using Core.Validators;
@@ -11,6 +11,7 @@ using Domain;
 using FluentValidation;
 using MediatR;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.EntityFrameworkCore;
 using Persistence;
 
@@ -18,9 +19,10 @@ namespace Core.Auth
 {
     public class Register
     {
-        public class Command : AppUser, IRequest<AppUserDto>
+        public class Command : AppUser, IEmailVerificationRequest, IRequest
         {
             public string Password { get; set; }
+            public string Origin { get; set; }
         }
 
         public class CommandValidator : AbstractValidator<Command>
@@ -34,23 +36,22 @@ namespace Core.Auth
             }
         }
 
-        public class Handler : IRequestHandler<Command, AppUserDto>
+        public class Handler : IRequestHandler<Command>
         {
             private readonly DataContext _context;
-            private readonly IJwtGenerator _jwtGenerator;
+            private readonly IEmailSender _emailSender;
             private readonly IMapper _mapper;
             private readonly UserManager<AppUser> _userManager;
 
-            public Handler(DataContext context, IMapper mapper, UserManager<AppUser> userManager,
-                IJwtGenerator jwtGenerator)
+            public Handler(DataContext context, IMapper mapper, UserManager<AppUser> userManager, IEmailSender emailSender)
             {
                 _context = context;
                 _mapper = mapper;
                 _userManager = userManager;
-                _jwtGenerator = jwtGenerator;
+                _emailSender = emailSender;
             }
 
-            public async Task<AppUserDto> Handle(Command request, CancellationToken cancellationToken)
+            public async Task<Unit> Handle(Command request, CancellationToken cancellationToken)
             {
                 if (await _context.Users.AnyAsync(x => x.Email == request.Email))
                     throw new RestException(HttpStatusCode.BadRequest, new {Email = "Email already exists"});
@@ -60,14 +61,14 @@ namespace Core.Auth
 
                 var user = _mapper.Map<Command, AppUser>(request);
 
-                var refreshToken = _jwtGenerator.GenerateRefreshToken();
-                user.RefreshTokens.Add(refreshToken);
-
                 var result = await _userManager.CreateAsync(user, request.Password);
 
                 if (!result.Succeeded) throw new Exception("Problem creating user!");
 
-                return new AppUserDto(user, _jwtGenerator, refreshToken.Token);
+                // Setup email confirmation
+                await _emailSender.ConstructEmailAndSendAsync(user, request);
+
+                return Unit.Value;
             }
         }
     }

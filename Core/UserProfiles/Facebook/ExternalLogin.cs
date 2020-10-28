@@ -59,7 +59,8 @@ namespace Core.UserProfiles.Facebook
                     DisplayName = userInfo.Name,
                     Id = userInfo.Id,
                     Email = userInfo.Email,
-                    UserName = "fb_" + userInfo.Id
+                    UserName = "fb_" + userInfo.Id,
+                    EmailConfirmed = true
                 };
 
                 if (userInfo.ImageData != null)

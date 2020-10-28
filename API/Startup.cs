@@ -9,6 +9,7 @@ using Core.Interfaces;
 using Core.UserProfiles;
 using Domain;
 using FluentValidation.AspNetCore;
+using Infrastructure.EmailContact;
 using Infrastructure.PhotoUpload;
 using Infrastructure.Security;
 using MediatR;
@@ -77,11 +78,16 @@ namespace API
                 opt.Filters.Add(new AuthorizeFilter(policy));
             }).AddFluentValidation(cfg => { cfg.RegisterValidatorsFromAssemblyContaining<InitCore>(); });
 
-            // Add ASP.NET Identity
-            var builder = services.AddIdentityCore<AppUser>();
+            // Add ASP.NET Identity & Enable Email Confirmation
+            var builder = services.AddIdentityCore<AppUser>(opt =>
+            {
+                opt.SignIn.RequireConfirmedEmail = true;
+            });
+
             var identityBuilder = new IdentityBuilder(builder.UserType, builder.Services);
             identityBuilder.AddEntityFrameworkStores<DataContext>();
             identityBuilder.AddSignInManager<SignInManager<AppUser>>();
+            identityBuilder.AddDefaultTokenProviders(); // token for email confirmation
 
             // Setup Authorization Requirements For Paths
             services.AddAuthorization(opt =>
@@ -139,6 +145,10 @@ namespace API
             // Setup Facebook login
             services.Configure<FacebookAppSettings>(Configuration.GetSection("Authentication:Facebook"));
             services.AddScoped<IFacebookAccessor, FacebookAccessor>();
+
+            // Setup SendGrid
+            services.Configure<SendGridSettings>(Configuration.GetSection("SendGrid"));
+            services.AddScoped<IEmailSender, EmailSender>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

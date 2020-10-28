@@ -12,4 +12,8 @@ export const usersApi = {
     requests.post(`/user/facebook`, { accessToken }),
   getRefreshToken: (): Promise<IUser> =>
     requests.post(`/user/refreshToken`, {}),
+  verifyEmail: (token: string, email: string): Promise<void> =>
+    requests.post(`/user/verifyEmail`, { token, email }),
+  resendEmailVerification: (email: string): Promise<void> =>
+    requests.get(`/user/resendEmailVerification?email=${email}`),
 };
