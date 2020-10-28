@@ -23,8 +23,10 @@ const App = () => {
   const { getUser, token } = useUserStore();
 
   useEffect(() => {
-    token ? getUser().finally(() => setAppAsLoaded()) : setAppAsLoaded();
-  }, [getUser, setAppAsLoaded, token]);
+    token && !appLoaded
+      ? getUser().finally(() => setAppAsLoaded())
+      : setAppAsLoaded();
+  }, [appLoaded, getUser, setAppAsLoaded, token]);
 
   if (!appLoaded) return <LoadingSpinner content={"Loading app..."} />;
 
