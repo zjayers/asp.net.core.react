@@ -16,13 +16,13 @@ const AuthRoute: React.FC<IProps> = ({
   component: Component,
   ...otherProps
 }) => {
-  const { isUserLoggedIn } = useUserStore();
+  const { isTokenValid } = useUserStore();
 
   return (
     <Route
       {...otherProps}
       render={(props) =>
-        isUserLoggedIn ? <Component {...props} /> : <Redirect to={"/"} />
+        isTokenValid ? <Component {...props} /> : <Redirect to={"/"} />
       }
     />
   );

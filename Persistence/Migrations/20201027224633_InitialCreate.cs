@@ -1,5 +1,4 @@
 ﻿using System;
-using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace Persistence.Migrations
@@ -71,9 +70,7 @@ namespace Persistence.Migrations
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
-                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn)
-                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn)
-                        .Annotation("Sqlite:Autoincrement", true),
+                        .Annotation("SqlServer:Identity", "1, 1"),
                     RoleId = table.Column<string>(nullable: false),
                     ClaimType = table.Column<string>(nullable: true),
                     ClaimValue = table.Column<string>(nullable: true)
@@ -94,9 +91,7 @@ namespace Persistence.Migrations
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
-                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn)
-                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn)
-                        .Annotation("Sqlite:Autoincrement", true),
+                        .Annotation("SqlServer:Identity", "1, 1"),
                     UserId = table.Column<string>(nullable: false),
                     ClaimType = table.Column<string>(nullable: true),
                     ClaimValue = table.Column<string>(nullable: true)
@@ -177,6 +172,30 @@ namespace Persistence.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Followings",
+                columns: table => new
+                {
+                    ObserverId = table.Column<string>(nullable: false),
+                    TargetId = table.Column<string>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Followings", x => new { x.ObserverId, x.TargetId });
+                    table.ForeignKey(
+                        name: "FK_Followings_AspNetUsers_ObserverId",
+                        column: x => x.ObserverId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_Followings_AspNetUsers_TargetId",
+                        column: x => x.TargetId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Photos",
                 columns: table => new
                 {
@@ -252,67 +271,36 @@ namespace Persistence.Migrations
             migrationBuilder.InsertData(
                 table: "AspNetUsers",
                 columns: new[] { "Id", "AccessFailedCount", "Bio", "ConcurrencyStamp", "DisplayName", "Email", "EmailConfirmed", "LockoutEnabled", "LockoutEnd", "NormalizedEmail", "NormalizedUserName", "PasswordHash", "PhoneNumber", "PhoneNumberConfirmed", "SecurityStamp", "TwoFactorEnabled", "UserName" },
-                values: new object[] { "7B01DF1A-2D77-4872-B383-7C5683035FBD", 0, null, "5c1cbe50-290a-464b-b32d-60981bea1877", "Bob", "bob@test.com", false, false, null, "BOB@TEST.COM", "BOB", "AQAAAAEAACcQAAAAEAy90BXaaDIxJm+9G2FiuKBNmjnGr4/syBRu/GTPuAZ2DbIAWNb1kl2VzC4PfBDJkA==", null, false, "92657c22-f297-41da-984a-8deb392f5540", false, "bob" });
-
-            migrationBuilder.InsertData(
-                table: "AspNetUsers",
-                columns: new[] { "Id", "AccessFailedCount", "Bio", "ConcurrencyStamp", "DisplayName", "Email", "EmailConfirmed", "LockoutEnabled", "LockoutEnd", "NormalizedEmail", "NormalizedUserName", "PasswordHash", "PhoneNumber", "PhoneNumberConfirmed", "SecurityStamp", "TwoFactorEnabled", "UserName" },
-                values: new object[] { "D8C62AEE-ADE7-4A9F-8A26-50C20ED5F1ED", 0, null, "c01f9e4a-5935-43aa-a137-1cf23c8c499e", "Tom", "tom@test.com", false, false, null, "TOM@TEST.COM", "TOM", "AQAAAAEAACcQAAAAEAy90BXaaDIxJm+9G2FiuKBNmjnGr4/syBRu/GTPuAZ2DbIAWNb1kl2VzC4PfBDJkA==", null, false, "b88d0d77-d0c7-41b1-adf0-fa43d13028db", false, "tom" });
-
-            migrationBuilder.InsertData(
-                table: "AspNetUsers",
-                columns: new[] { "Id", "AccessFailedCount", "Bio", "ConcurrencyStamp", "DisplayName", "Email", "EmailConfirmed", "LockoutEnabled", "LockoutEnd", "NormalizedEmail", "NormalizedUserName", "PasswordHash", "PhoneNumber", "PhoneNumberConfirmed", "SecurityStamp", "TwoFactorEnabled", "UserName" },
-                values: new object[] { "F169161F-C669-4CF9-8A33-662FFFBCEB7B", 0, null, "1abc3ae0-c563-4af0-aaee-bb7d6c1a0258", "Jane", "jane@test.com", false, false, null, "JANE@TEST.COM", "JANE", "AQAAAAEAACcQAAAAEAy90BXaaDIxJm+9G2FiuKBNmjnGr4/syBRu/GTPuAZ2DbIAWNb1kl2VzC4PfBDJkA==", null, false, "87f7b445-3fa1-497f-924c-39b0f2370947", false, "jane" });
+                values: new object[,]
+                {
+                    { "7B01DF1A-2D77-4872-B383-7C5683035FBD", 0, null, "5c1cbe50-290a-464b-b32d-60981bea1877", "Bob", "bob@test.com", false, false, null, "BOB@TEST.COM", "BOB", "AQAAAAEAACcQAAAAEAy90BXaaDIxJm+9G2FiuKBNmjnGr4/syBRu/GTPuAZ2DbIAWNb1kl2VzC4PfBDJkA==", null, false, "92657c22-f297-41da-984a-8deb392f5540", false, "bob" },
+                    { "D8C62AEE-ADE7-4A9F-8A26-50C20ED5F1ED", 0, null, "c01f9e4a-5935-43aa-a137-1cf23c8c499e", "Tom", "tom@test.com", false, false, null, "TOM@TEST.COM", "TOM", "AQAAAAEAACcQAAAAEAy90BXaaDIxJm+9G2FiuKBNmjnGr4/syBRu/GTPuAZ2DbIAWNb1kl2VzC4PfBDJkA==", null, false, "b88d0d77-d0c7-41b1-adf0-fa43d13028db", false, "tom" },
+                    { "F169161F-C669-4CF9-8A33-662FFFBCEB7B", 0, null, "1abc3ae0-c563-4af0-aaee-bb7d6c1a0258", "Jane", "jane@test.com", false, false, null, "JANE@TEST.COM", "JANE", "AQAAAAEAACcQAAAAEAy90BXaaDIxJm+9G2FiuKBNmjnGr4/syBRu/GTPuAZ2DbIAWNb1kl2VzC4PfBDJkA==", null, false, "87f7b445-3fa1-497f-924c-39b0f2370947", false, "jane" }
+                });
 
             migrationBuilder.InsertData(
                 table: "Events",
                 columns: new[] { "Id", "Category", "City", "Date", "Description", "Title", "Venue" },
-                values: new object[] { new Guid("c5d60467-2992-4878-a575-076c8b6ce32b"), "drinks", "London", new DateTime(2020, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "Activity 2 months ago", "Past Activity 1", "Pub" });
-
-            migrationBuilder.InsertData(
-                table: "Events",
-                columns: new[] { "Id", "Category", "City", "Date", "Description", "Title", "Venue" },
-                values: new object[] { new Guid("94502f82-d435-40ea-992e-5746385c545c"), "culture", "Paris", new DateTime(2020, 2, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "Activity 1 month ago", "Past Activity 2", "Louvre" });
-
-            migrationBuilder.InsertData(
-                table: "Events",
-                columns: new[] { "Id", "Category", "City", "Date", "Description", "Title", "Venue" },
-                values: new object[] { new Guid("4c81c658-272d-41ac-b406-48b85e05fcc1"), "culture", "London", new DateTime(2020, 3, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "Activity 1 month in future", "Future Activity 1", "Natural History Museum" });
-
-            migrationBuilder.InsertData(
-                table: "Events",
-                columns: new[] { "Id", "Category", "City", "Date", "Description", "Title", "Venue" },
-                values: new object[] { new Guid("fc2f7480-4b54-4564-b737-34ccb832f306"), "music", "London", new DateTime(2020, 4, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "Activity 2 months in future", "Future Activity 2", "O2 Arena" });
+                values: new object[,]
+                {
+                    { new Guid("c5d60467-2992-4878-a575-076c8b6ce32b"), "drinks", "London", new DateTime(2021, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.", "Future Activity 1", "Pub" },
+                    { new Guid("94502f82-d435-40ea-992e-5746385c545c"), "culture", "Paris", new DateTime(2021, 2, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.", "Future Activity 2", "Louvre" },
+                    { new Guid("4c81c658-272d-41ac-b406-48b85e05fcc1"), "culture", "London", new DateTime(2021, 3, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.", "Future Activity 3", "Natural History Museum" },
+                    { new Guid("fc2f7480-4b54-4564-b737-34ccb832f306"), "music", "London", new DateTime(2021, 4, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.", "Future Activity 4", "O2 Arena" }
+                });
 
             migrationBuilder.InsertData(
                 table: "UserEvents",
                 columns: new[] { "AppUserId", "EventId", "DateJoined", "IsHost" },
-                values: new object[] { "D8C62AEE-ADE7-4A9F-8A26-50C20ED5F1ED", new Guid("c5d60467-2992-4878-a575-076c8b6ce32b"), new DateTime(2020, 2, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), true });
-
-            migrationBuilder.InsertData(
-                table: "UserEvents",
-                columns: new[] { "AppUserId", "EventId", "DateJoined", "IsHost" },
-                values: new object[] { "F169161F-C669-4CF9-8A33-662FFFBCEB7B", new Guid("c5d60467-2992-4878-a575-076c8b6ce32b"), new DateTime(2020, 2, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), false });
-
-            migrationBuilder.InsertData(
-                table: "UserEvents",
-                columns: new[] { "AppUserId", "EventId", "DateJoined", "IsHost" },
-                values: new object[] { "7B01DF1A-2D77-4872-B383-7C5683035FBD", new Guid("94502f82-d435-40ea-992e-5746385c545c"), new DateTime(2020, 3, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), true });
-
-            migrationBuilder.InsertData(
-                table: "UserEvents",
-                columns: new[] { "AppUserId", "EventId", "DateJoined", "IsHost" },
-                values: new object[] { "F169161F-C669-4CF9-8A33-662FFFBCEB7B", new Guid("4c81c658-272d-41ac-b406-48b85e05fcc1"), new DateTime(2020, 10, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), true });
-
-            migrationBuilder.InsertData(
-                table: "UserEvents",
-                columns: new[] { "AppUserId", "EventId", "DateJoined", "IsHost" },
-                values: new object[] { "F169161F-C669-4CF9-8A33-662FFFBCEB7B", new Guid("fc2f7480-4b54-4564-b737-34ccb832f306"), new DateTime(2020, 10, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), true });
-
-            migrationBuilder.InsertData(
-                table: "UserEvents",
-                columns: new[] { "AppUserId", "EventId", "DateJoined", "IsHost" },
-                values: new object[] { "7B01DF1A-2D77-4872-B383-7C5683035FBD", new Guid("fc2f7480-4b54-4564-b737-34ccb832f306"), new DateTime(2020, 10, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), false });
+                values: new object[,]
+                {
+                    { "D8C62AEE-ADE7-4A9F-8A26-50C20ED5F1ED", new Guid("c5d60467-2992-4878-a575-076c8b6ce32b"), new DateTime(2020, 2, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), true },
+                    { "F169161F-C669-4CF9-8A33-662FFFBCEB7B", new Guid("c5d60467-2992-4878-a575-076c8b6ce32b"), new DateTime(2020, 2, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), false },
+                    { "7B01DF1A-2D77-4872-B383-7C5683035FBD", new Guid("94502f82-d435-40ea-992e-5746385c545c"), new DateTime(2020, 3, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), true },
+                    { "F169161F-C669-4CF9-8A33-662FFFBCEB7B", new Guid("4c81c658-272d-41ac-b406-48b85e05fcc1"), new DateTime(2020, 10, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), true },
+                    { "F169161F-C669-4CF9-8A33-662FFFBCEB7B", new Guid("fc2f7480-4b54-4564-b737-34ccb832f306"), new DateTime(2020, 10, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), true },
+                    { "7B01DF1A-2D77-4872-B383-7C5683035FBD", new Guid("fc2f7480-4b54-4564-b737-34ccb832f306"), new DateTime(2020, 10, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), false }
+                });
 
             migrationBuilder.CreateIndex(
                 name: "IX_AspNetRoleClaims_RoleId",
@@ -323,7 +311,8 @@ namespace Persistence.Migrations
                 name: "RoleNameIndex",
                 table: "AspNetRoles",
                 column: "NormalizedName",
-                unique: true);
+                unique: true,
+                filter: "[NormalizedName] IS NOT NULL");
 
             migrationBuilder.CreateIndex(
                 name: "IX_AspNetUserClaims_UserId",
@@ -349,7 +338,8 @@ namespace Persistence.Migrations
                 name: "UserNameIndex",
                 table: "AspNetUsers",
                 column: "NormalizedUserName",
-                unique: true);
+                unique: true,
+                filter: "[NormalizedUserName] IS NOT NULL");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Comments_AuthorId",
@@ -360,6 +350,11 @@ namespace Persistence.Migrations
                 name: "IX_Comments_EventId",
                 table: "Comments",
                 column: "EventId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Followings_TargetId",
+                table: "Followings",
+                column: "TargetId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Photos_AppUserId",
@@ -391,6 +386,9 @@ namespace Persistence.Migrations
 
             migrationBuilder.DropTable(
                 name: "Comments");
+
+            migrationBuilder.DropTable(
+                name: "Followings");
 
             migrationBuilder.DropTable(
                 name: "Photos");

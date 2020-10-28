@@ -95,6 +95,11 @@ const ActivityItem: React.FC<IProps> = ({
             floated={"right"}
             content={"View"}
             color={"blue"}
+            style={{
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+            }}
             onClick={() => setSelectedActivity(id)}
           />
         </div>
