@@ -1,16 +1,15 @@
+import { FORM_ERROR } from "final-form";
 import { observer } from "mobx-react";
-import { Simulate } from "react-dom/test-utils";
-import { Button, Divider, Form, Header } from "semantic-ui-react";
+import React from "react";
 import { Field, Form as FinalForm } from "react-final-form";
 import { combineValidators, isRequired } from "revalidate";
-
-import ErrorLabel from "../../shared/form/ErrorLabel/ErrorLabel";
-import { FORM_ERROR } from "final-form";
-import { IUserFormValues } from "../../../../models";
-import React from "react";
-import { TextInput } from "../../shared";
+import { Button, Divider, Form, Header } from "semantic-ui-react";
 import { useAuthRedirect } from "../../../../hooks/useAuthRedirect";
 import { useUserStore } from "../../../../hooks/useUserStore";
+import { IUserFormValues } from "../../../../models";
+import { TextInput } from "../../shared";
+
+import ErrorLabel from "../../shared/form/ErrorLabel/ErrorLabel";
 import SocialLogin from "../SocialLogin/SocialLogin";
 
 const validate = combineValidators({

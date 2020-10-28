@@ -37,21 +37,11 @@ namespace API
         public IConfiguration Configuration { get; }
 
         // This method gets called by the runtime. Use this method to add services to the container.
-        public void ConfigureDevelopmentServices(IServiceCollection services)
-        {
-            services.AddDbContext<DataContext>(opt =>
-            {
-                // Setup lazy loading proxies
-                opt.UseLazyLoadingProxies();
-                opt.UseSqlite(Configuration.GetConnectionString("DefaultConnection"));
-            });
 
-            ConfigureServices(services);
-        }
 
-        public void ConfigureProductionServices(IServiceCollection services)
+        public void ConfigureServices(IServiceCollection services)
         {
-            // Add Database Context
+
             services.AddDbContext<DataContext>(opt =>
             {
                 // Setup lazy loading proxies
@@ -59,11 +49,6 @@ namespace API
                 opt.UseSqlServer(Configuration.GetConnectionString("DefaultConnection"));
             });
 
-            ConfigureServices(services);
-        }
-
-        public void ConfigureServices(IServiceCollection services)
-        {
             // Add SignalR
             services.AddSignalR();
 
@@ -118,8 +103,8 @@ namespace API
                     IssuerSigningKey = key,
                     ValidateAudience = false,
                     ValidateIssuer = false,
-                    ValidateLifetime = true,
-                    ClockSkew = TimeSpan.Zero
+                    ValidateLifetime = true,  // Validate timeout of token
+                    ClockSkew = TimeSpan.Zero // Remove 5 minute expiry window
                 };
 
                 // Set up JWT Bearer to allow access to token from SignalR

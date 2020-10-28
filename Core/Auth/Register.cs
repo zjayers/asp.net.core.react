@@ -60,17 +60,14 @@ namespace Core.Auth
 
                 var user = _mapper.Map<Command, AppUser>(request);
 
-                // Command logic goes here
+                var refreshToken = _jwtGenerator.GenerateRefreshToken();
+                user.RefreshTokens.Add(refreshToken);
 
                 var result = await _userManager.CreateAsync(user, request.Password);
 
                 if (!result.Succeeded) throw new Exception("Problem creating user!");
 
-                var userDto = _mapper.Map<AppUser, AppUserDto>(user);
-
-                // Generate the jwt token and return the user
-                userDto.Token = _jwtGenerator.CreateToken(user);
-                return userDto;
+                return new AppUserDto(user, _jwtGenerator, refreshToken.Token);
             }
         }
     }

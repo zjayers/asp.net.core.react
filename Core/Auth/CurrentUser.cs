@@ -38,10 +38,13 @@ namespace Core.Auth
                 if (username == null) throw new RestException(HttpStatusCode.Unauthorized);
 
                 var user = await _userManager.FindByNameAsync(username);
-                var userDto = _mapper.Map<AppUser, AppUserDto>(user);
 
-                userDto.Token = _jwtGenerator.CreateToken(user);
-                return userDto;
+                var refreshToken = _jwtGenerator.GenerateRefreshToken();
+                user.RefreshTokens.Add(refreshToken);
+
+                await _userManager.UpdateAsync(user);
+
+                return new AppUserDto(user, _jwtGenerator, refreshToken.Token);
             }
         }
     }

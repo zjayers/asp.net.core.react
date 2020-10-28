@@ -54,16 +54,14 @@ namespace Core.Auth
 
                 var result = await _signInManager.CheckPasswordSignInAsync(user, request.Password, false);
 
-                if (result.Succeeded)
-                {
-                    var userDto = _mapper.Map<AppUser, AppUserDto>(user);
+                if (!result.Succeeded) throw new RestException(HttpStatusCode.Unauthorized);
 
-                    // Generate the jwt token and return the user
-                    userDto.Token = _jwtGenerator.CreateToken(user);
-                    return userDto;
-                }
+                var refreshToken = _jwtGenerator.GenerateRefreshToken();
+                user.RefreshTokens.Add(refreshToken);
 
-                throw new RestException(HttpStatusCode.Unauthorized);
+                await _userManager.UpdateAsync(user);
+
+                return new AppUserDto(user, _jwtGenerator, refreshToken.Token);
             }
         }
     }
