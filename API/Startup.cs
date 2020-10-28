@@ -21,10 +21,9 @@ using Microsoft.AspNetCore.Mvc.Authorization;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 using Microsoft.IdentityModel.Tokens;
 using Persistence;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Hosting;
 
 namespace API
 {
@@ -38,9 +37,20 @@ namespace API
         public IConfiguration Configuration { get; }
 
         // This method gets called by the runtime. Use this method to add services to the container.
-        public void ConfigureServices(IServiceCollection services)
+        public void ConfigureDevelopmentServices(IServiceCollection services)
         {
+            services.AddDbContext<DataContext>(opt =>
+            {
+                // Setup lazy loading proxies
+                opt.UseLazyLoadingProxies();
+                opt.UseSqlite(Configuration.GetConnectionString("DefaultConnection"));
+            });
 
+            ConfigureServices(services);
+        }
+
+        public void ConfigureProductionServices(IServiceCollection services)
+        {
             // Add Database Context
             services.AddDbContext<DataContext>(opt =>
             {
@@ -48,6 +58,13 @@ namespace API
                 opt.UseLazyLoadingProxies();
                 opt.UseSqlServer(Configuration.GetConnectionString("DefaultConnection"));
             });
+
+            ConfigureServices(services);
+
+        }
+
+        public void ConfigureServices(IServiceCollection services)
+        {
 
             // Add SignalR
             services.AddSignalR();
@@ -71,12 +88,11 @@ namespace API
 
             // Add API Controllers
             services.AddControllers(opt =>
-                {
-                    // This causes all endpoints to require authorization
-                    var policy = new AuthorizationPolicyBuilder().RequireAuthenticatedUser().Build();
-                    opt.Filters.Add(new AuthorizeFilter(policy));
-                }
-            ).AddFluentValidation(cfg => { cfg.RegisterValidatorsFromAssemblyContaining<InitCore>(); });
+            {
+                // This causes all endpoints to require authorization
+                var policy = new AuthorizationPolicyBuilder().RequireAuthenticatedUser().Build();
+                opt.Filters.Add(new AuthorizeFilter(policy));
+            }).AddFluentValidation(cfg => { cfg.RegisterValidatorsFromAssemblyContaining<InitCore>(); });
 
             // Add ASP.NET Identity
             var builder = services.AddIdentityCore<AppUser>();
@@ -100,12 +116,12 @@ namespace API
             {
                 opt.TokenValidationParameters = new TokenValidationParameters
                 {
-                    ValidateIssuerSigningKey = true,
-                    IssuerSigningKey = key,
-                    ValidateAudience = false,
-                    ValidateIssuer = false,
-                    ValidateLifetime = true,
-                    ClockSkew = TimeSpan.Zero
+                ValidateIssuerSigningKey = true,
+                IssuerSigningKey = key,
+                ValidateAudience = false,
+                ValidateIssuer = false,
+                ValidateLifetime = true,
+                ClockSkew = TimeSpan.Zero
                 };
 
                 // Set up JWT Bearer to allow access to token from SignalR
