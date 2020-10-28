@@ -52,6 +52,10 @@ namespace Core.Auth
                 if (user == null)
                     throw new RestException(HttpStatusCode.Unauthorized, new {activity = "User was null"});
 
+
+                if (!user.EmailConfirmed)
+                    throw new RestException(HttpStatusCode.BadRequest, new {email = "Email is not confirmed"});
+
                 var result = await _signInManager.CheckPasswordSignInAsync(user, request.Password, false);
 
                 if (!result.Succeeded) throw new RestException(HttpStatusCode.Unauthorized);
