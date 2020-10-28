@@ -3,9 +3,9 @@ import { Redirect } from "react-router-dom";
 import { useUserStore } from "./useUserStore";
 
 export const useAuthRedirect = (Component: JSX.Element) => {
-  const { isUserLoggedIn, isTokenValid } = useUserStore();
+  const { isUserLoggedIn } = useUserStore();
 
-  if (isUserLoggedIn && isTokenValid) {
+  if (isUserLoggedIn) {
     return <Redirect to="/events" />;
   }
 

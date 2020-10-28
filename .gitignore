@@ -14,7 +14,7 @@ appsettings.json
 *.user
 *.userosscache
 *.sln.docstates
-
+.vscode
 ./API/wwwroot
 
 wwwroot

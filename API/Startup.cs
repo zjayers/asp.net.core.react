@@ -60,12 +60,10 @@ namespace API
             });
 
             ConfigureServices(services);
-
         }
 
         public void ConfigureServices(IServiceCollection services)
         {
-
             // Add SignalR
             services.AddSignalR();
 
@@ -116,12 +114,12 @@ namespace API
             {
                 opt.TokenValidationParameters = new TokenValidationParameters
                 {
-                ValidateIssuerSigningKey = true,
-                IssuerSigningKey = key,
-                ValidateAudience = false,
-                ValidateIssuer = false,
-                ValidateLifetime = true,
-                ClockSkew = TimeSpan.Zero
+                    ValidateIssuerSigningKey = true,
+                    IssuerSigningKey = key,
+                    ValidateAudience = false,
+                    ValidateIssuer = false,
+                    ValidateLifetime = true,
+                    ClockSkew = TimeSpan.Zero
                 };
 
                 // Set up JWT Bearer to allow access to token from SignalR
@@ -152,6 +150,10 @@ namespace API
             // Setup Cloudinary Photo Upload
             services.Configure<CloudinarySettings>(Configuration.GetSection("Cloudinary"));
             services.AddScoped<IPhotoAccessor, PhotoAccessor>();
+
+            // Setup Facebook login
+            services.Configure<FacebookAppSettings>(Configuration.GetSection("Authentication:Facebook"));
+            services.AddScoped<IFacebookAccessor, FacebookAccessor>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -176,7 +178,8 @@ namespace API
             app.UseCsp(opt => opt
                 .BlockAllMixedContent()
                 .StyleSources(s => s.Self()
-                    .CustomSources("https://fonts.googleapis.com", "sha256-F4GpCPyRepgP5znjMD8sc7PEjzet5Eef4r09dEGPpTs="))
+                    .CustomSources("https://fonts.googleapis.com",
+                        "sha256-F4GpCPyRepgP5znjMD8sc7PEjzet5Eef4r09dEGPpTs="))
                 .FontSources(s => s.Self().CustomSources("https://fonts.gstatic.com", "data:"))
                 .FormActions(s => s.Self())
                 .FrameAncestors(s => s.Self())
