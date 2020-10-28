@@ -1,9 +1,3 @@
-// * Imports
-import { formatDistance } from "date-fns";
-import { observer } from "mobx-react";
-import React, { Fragment, useEffect } from "react";
-import { Field, Form as FinalForm } from "react-final-form";
-import { Link } from "react-router-dom";
 import {
   Button,
   Comment,
@@ -12,9 +6,17 @@ import {
   Header,
   Segment,
 } from "semantic-ui-react";
-import { useCommentStore } from "../../../../hooks/useCommentStore";
+import { Field, Form as FinalForm } from "react-final-form";
+import React, { Fragment, useEffect } from "react";
+
 import { IEvent } from "../../../../models";
+import { Link } from "react-router-dom";
 import { TextAreaInput } from "../../shared";
+// * Imports
+import { formatDistance } from "date-fns";
+import { observer } from "mobx-react";
+import placeholderImage from '../../../../assets/user.png'
+import { useCommentStore } from "../../../../hooks/useCommentStore";
 
 // * Interfaces
 interface IProps {
@@ -53,7 +55,7 @@ const ActivityDetailsChat: React.FC<IProps> = ({ activity }) => {
             activity.comments.map((comment) => (
               <Fragment key={comment.id}>
                 <Comment style={{ marginBottom: "20px" }}>
-                  <Comment.Avatar src={comment.image || "assets/user.png"} />
+                  <Comment.Avatar src={comment.image || placeholderImage} />
                   <Comment.Content>
                     <Comment.Author
                       as={Link}

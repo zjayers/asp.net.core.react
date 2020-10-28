@@ -1,9 +1,10 @@
-import { autorun, makeAutoObservable, reaction, runInAction } from "mobx";
-import { usersApi } from "../../api";
 import { IUser, IUserFormValues } from "../../models";
+import { autorun, makeAutoObservable, reaction, runInAction } from "mobx";
+
+import { RootStore } from "../index";
 import { catchAsync } from "../../util/catch-async";
 import { history } from "../../app/features/browser-history";
-import { RootStore } from "../index";
+import { usersApi } from "../../api";
 
 export default class UserStore {
   rootStore: RootStore;
@@ -11,6 +12,7 @@ export default class UserStore {
   // * Observables
   user: IUser | null = null;
   token: string | null = null;
+  loadingFacebook = false;
   getUser = catchAsync(async () => {
     const user = await usersApi.getCurrentUser();
     runInAction(() => (this.user = user));
@@ -62,6 +64,7 @@ export default class UserStore {
   private setUserTokenAndContinue = (user: IUser | null) => {
     runInAction(() => {
       if (user?.token) {
+        this.user = user;
         this.setToken(user.token);
         this.rootStore.modalStore.closeModal();
         history.push("/events");
@@ -69,7 +72,17 @@ export default class UserStore {
     });
   };
 
-  // * Actions
+  fbLogin = catchAsync(
+    async (response: any) => {
+      this.loadingFacebook = true;
+      const user = await usersApi.fbLogin(response.accessToken);
+      this.setUserTokenAndContinue(user);
+      runInAction(() => {
+        this.loadingFacebook = false;
+      });
+    },
+    () => (this.loadingFacebook = false)
+  );
   login = catchAsync(async (values: IUserFormValues) => {
     const user = await usersApi.login(values);
     this.setUserTokenAndContinue(user);

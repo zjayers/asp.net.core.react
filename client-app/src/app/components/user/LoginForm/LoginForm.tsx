@@ -1,13 +1,17 @@
-import { FORM_ERROR } from "final-form";
-import React from "react";
+import { observer } from "mobx-react";
+import { Simulate } from "react-dom/test-utils";
+import { Button, Divider, Form, Header } from "semantic-ui-react";
 import { Field, Form as FinalForm } from "react-final-form";
 import { combineValidators, isRequired } from "revalidate";
-import { Button, Form, Header } from "semantic-ui-react";
+
+import ErrorLabel from "../../shared/form/ErrorLabel/ErrorLabel";
+import { FORM_ERROR } from "final-form";
 import { IUserFormValues } from "../../../../models";
+import React from "react";
+import { TextInput } from "../../shared";
 import { useAuthRedirect } from "../../../../hooks/useAuthRedirect";
 import { useUserStore } from "../../../../hooks/useUserStore";
-import { TextInput } from "../../shared";
-import ErrorLabel from "../../shared/form/ErrorLabel/ErrorLabel";
+import SocialLogin from "../SocialLogin/SocialLogin";
 
 const validate = combineValidators({
   email: isRequired("Email"),
@@ -15,7 +19,7 @@ const validate = combineValidators({
 });
 
 const LoginForm = () => {
-  const { login } = useUserStore();
+  const { login, fbLogin, loadingFacebook } = useUserStore();
 
   return useAuthRedirect(
     <FinalForm
@@ -28,7 +32,6 @@ const LoginForm = () => {
       render={({
         handleSubmit,
         submitting,
-        form,
         submitError,
         invalid,
         pristine,
@@ -63,10 +66,12 @@ const LoginForm = () => {
             loading={submitting}
             content={"Login"}
           />
+          <Divider horizontal>Or</Divider>
+          <SocialLogin fbCallback={fbLogin} loading={loadingFacebook} />
         </Form>
       )}
     />
   );
 };
 
-export default LoginForm;
+export default observer(LoginForm);
